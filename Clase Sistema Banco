@@ -1,0 +1,47 @@
+import java.util.Scanner;
+
+public class SistemaBanco {
+    private Scanner sc = new Scanner(System.in);
+
+    public void iniciar() {
+        System.out.println("=== Bienvenido al Sistema Bancario ===");
+
+        // Crear cliente
+        Cliente cliente = crearCliente();
+
+        // Crear cuenta asociada
+        Cuenta cuenta = crearCuenta(cliente);
+
+        System.out.println("\nCliente y cuenta creados con éxito:");
+        System.out.println(cliente);
+        System.out.println(cuenta);
+    }
+
+    public Cliente crearCliente() {
+        System.out.print("Ingrese el DNI del cliente: ");
+        int dni = sc.nextInt();
+        sc.nextLine(); // limpiar buffer
+
+        System.out.print("Ingrese el nombre del cliente: ");
+        String nom = sc.nextLine();
+
+        System.out.print("Ingrese el apellido del cliente: ");
+        String apell = sc.nextLine();
+
+        return new Cliente(dni, nom, apell);
+    }
+
+    public Cuenta crearCuenta(Cliente cliente) {
+        System.out.print("Ingrese número de cuenta: ");
+        String numCuenta = sc.nextLine();
+
+        System.out.print("Ingrese tipo de cuenta: ");
+        String tipCuenta = sc.nextLine();
+
+        System.out.print("Ingrese saldo inicial: ");
+        double saldo = sc.nextDouble();
+        sc.nextLine(); // limpiar buffer
+
+        return new Cuenta(numCuenta, tipCuenta, saldo, cliente);
+    }
+}
