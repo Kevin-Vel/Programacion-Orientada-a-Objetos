@@ -1,11 +1,11 @@
 public class Cliente {
     private int idcli, dni;
-    private String nom, apell, sex;
+    private String nom, apell;
 
-    public Cliente(int idcli, String nom, String apell) {
-        this.idcli = idcli;
-        this.nom = nom;
-        this.apell = apell;
+    public Cliente(int idclie, int dni, String nom, String apell) {
+        this.idcli=idclie;
+        this.nom=nom;
+        this.apell=apell;
         this.dni=dni;
     }
 
@@ -16,8 +16,11 @@ public class Cliente {
 
     public void setNom(String nom){this.nom=nom;}
     public void setApell(String apell){this.apell=apell;}
-    public void setIdcli(int idcli){this.idcli=idcli;}
-    public void setDni(int dni){this.dni=dni;}
+
+    @Override
+    public String toString(){
+        return idcli + " " + dni + "-" + nom + "-" + apell;
+    }
 }
 
 

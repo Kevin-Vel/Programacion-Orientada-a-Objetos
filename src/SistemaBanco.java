@@ -1,7 +1,7 @@
 public class SistemaBanco {
 
-    public Cliente crearCliente(int dni, String nom, String apell) {
-        return new Cliente(dni, nom, apell);
+    public Cliente crearCliente(int idclie, int dni, String nom, String apell) {
+        return new Cliente(idclie, dni, nom, apell);
     }
 
     public Cuenta crearCuenta(int numCuent, String tipCuenta, double saldo, Cliente cliente) {
