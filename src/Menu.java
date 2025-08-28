@@ -1,5 +1,3 @@
-import com.sun.security.auth.module.JndiLoginModule;
-import jdk.nashorn.internal.scripts.JO;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
@@ -19,22 +17,22 @@ public class Menu extends JFrame {
         panel.setLayout(new GridLayout(3, 1, 10, 10));// 3 filas y 10px
 
         //opciones
-        JButton btnCliente = new JButton("Crear Cliente");
-        JButton btnCuenta = new JButton("Cuenta");
+        JButton btnCliente = new JButton("Creaar Cliente");
+        JButton btnIniciar = new JButton("Iniciar Sesion");
         JButton btnSalir = new JButton("Salir");
 
         //implementacion
         panel.add(btnCliente);
-        panel.add(btnCuenta);
+        panel.add(btnIniciar);
         panel.add(btnSalir);
 
         add(panel, BorderLayout.CENTER);
 
         //acciones
         btnCliente.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, "Ventana Cliente"));
+                JOptionPane.showMessageDialog(this, new VentanaCliente()));
 
-        btnCuenta.addActionListener(e ->
+        btnIniciar.addActionListener(e ->
                 JOptionPane.showMessageDialog(this,"Ventana Cuenta"));
 
         btnSalir.addActionListener( e ->
