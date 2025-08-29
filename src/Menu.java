@@ -25,7 +25,6 @@ public class Menu extends JFrame {
         panel.add(btnCliente);
         panel.add(btnIniciar);
         panel.add(btnSalir);
-        panel.add(btnVerClientes);
 
         add(panel, BorderLayout.CENTER);
 
@@ -35,14 +34,17 @@ public class Menu extends JFrame {
             ventana.setVisible(true);
         });
 
-        btnIniciar.addActionListener(e ->
-                JOptionPane.showMessageDialog(this,"Ventana Cuenta"));
+        btnIniciar.addActionListener(e -> {
+            VentanaIniciar ventana = new VentanaIniciar();
+            ventana.setVisible(true);
+            dispose(); // para cerrar la ventana actual si quieres
+        });
 
         btnSalir.addActionListener( e ->
                 System.exit(0));
         btnVerClientes.addActionListener(e -> {
             String lista = sistema.getOrdenamiento().listaFormateada();
-            JOptionPane.showMessageDialog(this, "Lista de Clientes");
+            JOptionPane.showMessageDialog(this, lista, "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
         });
     }
 }

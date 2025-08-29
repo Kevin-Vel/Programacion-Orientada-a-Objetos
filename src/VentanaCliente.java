@@ -2,6 +2,14 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class VentanaCliente extends JFrame {
+    public VentanaCliente(boolean loginExitoso){
+        super("Ventana Cliente");
+        if(loginExitoso){
+            //carga los datos
+        }
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
     private SistemaBanco sistema;
     private JTextField txtDni, txtNom, txtApell;
     private JButton btnCrear, btnVerClientes;

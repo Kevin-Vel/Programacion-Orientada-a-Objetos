@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Ordenamiento {
@@ -24,5 +26,12 @@ public class Ordenamiento {
         }
         return sb.toString();
     }
-
+    public Cliente buscarPorDni(int dni) {
+        for (Cliente c : listaCliente) {
+            if (c.getDni() == dni) {
+                return c; // retorna el cliente si lo encuentra
+            }
+        }
+        return null; // si no lo encuentra
+    }
 }
