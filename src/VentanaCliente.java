@@ -2,10 +2,15 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class VentanaCliente extends JFrame {
+    private SistemaBanco sistema;
     private JTextField txtDni, txtNom, txtApell;
-    private JButton btnCrear;
+    private JButton btnCrear, btnVerClientes;
 
-    public VentanaCliente() {
+    //Llamar ala clase de ordenamiento
+    private Ordenamiento ordenamiento= new Ordenamiento();
+
+    public VentanaCliente(SistemaBanco sistema) {
+        this.sistema=sistema;
         setTitle("Crear Cliente");
         setSize(300, 220);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,8 +40,13 @@ public class VentanaCliente extends JFrame {
         txtApell.setBounds(120, 100, 120, 25);
         add(txtApell);
 
+        //Inicializacion de botones
+        btnVerClientes= new JButton("Ver Clientes");
+        btnVerClientes.setBounds(100,140,140,30);
+        add(btnVerClientes);
+
         btnCrear = new JButton("Crear Cliente");
-        btnCrear.setBounds(80, 140, 140, 30);
+        btnCrear.setBounds(20, 140, 140, 30);
         add(btnCrear);
 
         // Evento del botón
@@ -50,15 +60,29 @@ public class VentanaCliente extends JFrame {
                     String apell = txtApell.getText();
 
                     Cliente nuevoCliente = new Cliente(idcli, dni, nom, apell);
+                    ordenamiento.Implementacion(nuevoCliente);
 
                     JOptionPane.showMessageDialog(null,
                             "Cliente creado:\n" + nuevoCliente.toString());
+
+                    //Limpieza de Casilleros
+                    txtApell.setText("");
+                    txtDni.setText("");
+                    txtNom.setText("");
+
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "DNI inválido");
                 }
             }
         });
-
+        // Evento para ver clientes ordenados
+        btnVerClientes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String lista = ordenamiento.listaFormateada();
+                JOptionPane.showMessageDialog(null, lista);
+            }
+        });
         setVisible(true);
     }
 }

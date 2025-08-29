@@ -1,7 +1,9 @@
 public class SistemaBanco {
 
     public Cliente crearCliente(int idclie, int dni, String nom, String apell) {
-        return new Cliente(idclie, dni, nom, apell);
+        Cliente cliente = new Cliente(idclie, dni, nom, apell);
+        ordenamiento.Implementacion(cliente);  // agrega ordenado
+        return cliente;
     }
 
     public Cuenta crearCuenta(int numCuent, String tipCuenta, double saldo, Cliente cliente) {
@@ -13,5 +15,9 @@ public class SistemaBanco {
         int dni1 = dni;
         return (dni);
     }
-}
+    private Ordenamiento ordenamiento = new Ordenamiento();
 
+    public Ordenamiento getOrdenamiento() {
+        return ordenamiento;
+    }
+}
