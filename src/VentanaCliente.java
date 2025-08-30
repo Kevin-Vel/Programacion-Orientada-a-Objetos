@@ -20,7 +20,7 @@ public class VentanaCliente extends JFrame {
     public VentanaCliente(SistemaBanco sistema) {
         this.sistema=sistema;
         setTitle("Crear Cliente");
-        setSize(300, 220);
+        setSize(600, 420);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
@@ -48,13 +48,21 @@ public class VentanaCliente extends JFrame {
         txtApell.setBounds(120, 100, 120, 25);
         add(txtApell);
 
+        JLabel lblContraseña = new JLabel("Ingrese Contraseña");
+        lblContraseña.setBounds(20,140,100,25);
+        add(lblContraseña);
+
+        JPasswordField txtContraseña = new JPasswordField();
+        txtContraseña.setBounds(120, 140,120,25);
+        add(txtContraseña);
+
         //Inicializacion de botones
         btnVerClientes= new JButton("Ver Clientes");
-        btnVerClientes.setBounds(100,140,140,30);
+        btnVerClientes.setBounds(80,180,140,30);
         add(btnVerClientes);
 
         btnCrear = new JButton("Crear Cliente");
-        btnCrear.setBounds(20, 140, 140, 30);
+        btnCrear.setBounds(80, 220, 140, 30);
         add(btnCrear);
 
         // Evento del botón

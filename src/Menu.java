@@ -32,14 +32,14 @@ public class Menu extends JFrame {
         btnCliente.addActionListener(e ->{
             VentanaCliente ventana=new VentanaCliente(sistema);
             ventana.setVisible(true);
+            dispose();
         });
 
         btnIniciar.addActionListener(e -> {
-            VentanaIniciar ventana = new VentanaIniciar();
-            ventana.setVisible(true);
+            VentanaIniciar iniciar = new VentanaIniciar(sistema);
+            iniciar.setVisible(true);
             dispose(); // para cerrar la ventana actual si quieres
         });
-
         btnSalir.addActionListener( e ->
                 System.exit(0));
         btnVerClientes.addActionListener(e -> {

@@ -5,7 +5,7 @@ import java.awt.*;
 public class VentanaIniciar extends JFrame {
     private SistemaBanco sistema;
 
-    public VentanaIniciar() {
+    public VentanaIniciar(SistemaBanco sistema) {
         this.sistema = sistema;
         setTitle("Iniciar Sesión");
         setSize(300,200);
