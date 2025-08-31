@@ -64,7 +64,6 @@ public class VentanaCliente extends JFrame {
         btnCrear = new JButton("Crear Cliente");
         btnCrear.setBounds(80, 220, 140, 30);
         add(btnCrear);
-
         // Evento del botón
         btnCrear.addActionListener(new ActionListener() {
             @Override
@@ -99,6 +98,16 @@ public class VentanaCliente extends JFrame {
                 JOptionPane.showMessageDialog(null, lista);
             }
         });
+        JButton btnVolver = new JButton("Regresar ");
+        btnVolver.setBounds(100,200,150,30);
+        add(btnVolver);
+
+        btnVolver.addActionListener( e -> {
+           Menu inicio = new Menu();
+           inicio.setVisible(true);
+           dispose();
+        });
+        
         setVisible(true);
     }
 }
