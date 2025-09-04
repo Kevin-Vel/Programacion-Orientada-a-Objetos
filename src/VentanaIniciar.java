@@ -21,23 +21,7 @@ public class VentanaIniciar extends JFrame {
         add(btnIniciar);
 
         btnIniciar.addActionListener(e -> {
-            try {
-                int dni = Integer.parseInt(txtDni.getText());
-                Cliente cliente = sistema.buscarPorDni(dni);
 
-                if (cliente != null) {
-                    JOptionPane.showMessageDialog(this,
-                            "Bienvenido " + cliente.getNom());
-                    // Aquí puedes abrir VentanaCliente
-                    new VentanaCliente(true).setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "DNI no encontrado.");
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "DNI inválido.");
-            }
         });
     }
 }

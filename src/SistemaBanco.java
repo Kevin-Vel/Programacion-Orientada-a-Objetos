@@ -16,10 +16,6 @@ public class SistemaBanco {
         return (dni);
     }
 
-    public Cliente VentanaIniciar(int dni){
-        return ordenamiento.buscarPorDni(dni);
-    }
-
     public Cliente buscarPorDni(int dni) {
         for (Cliente c : ordenamiento.getListaCliente()) {
             if (c.getDni() == dni) {
