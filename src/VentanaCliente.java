@@ -57,23 +57,27 @@ public class VentanaCliente extends JFrame {
         panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
 
         add(panelPrincipal, BorderLayout.CENTER);
+        //Filtros
+        PatrondeIngreso.soloNumeros(txtDni, 8);
+        PatrondeIngreso.soloLetras(txtNom);
+        PatrondeIngreso.soloLetras(txtApell);
 
         // Eventos (mantener igual)
         btnCrear.addActionListener(e -> {
             try {
-                int idcli = (int) (Math.random() * 1000);
-                int dni = Integer.parseInt(txtDni.getText());
-                String nom = txtNom.getText();
-                String apell = txtApell.getText();
+                int idclie=(int)(Math.random()*1000);
+                int dni= Integer.parseInt(txtDni.getText());
+                String nom= PatrondeIngreso.formatearNombre(txtNom.getText());
+                String apell= PatrondeIngreso.formatearNombre(txtApell.getText());
 
-                Cliente nuevoCliente = new Cliente(idcli, dni, nom, apell);
-                sistema.getOrdenamiento().Implementacion(nuevoCliente);
+                // Creacion Cliente
+                Cliente nuevoCLiente = new Cliente(idclie,dni,nom,apell);
+                sistema.getOrdenamiento().Implementacion(nuevoCLiente);
 
-                JOptionPane.showMessageDialog(null, "Cliente creado:\n" + nuevoCliente.toString());
-
-                txtApell.setText("");
+                JOptionPane.showMessageDialog(null,"Cliente Creado:\n"+nuevoCLiente.toString());
                 txtDni.setText("");
                 txtNom.setText("");
+                txtApell.setText("");
                 txtContraseña.setText("");
 
             } catch (NumberFormatException ex) {
@@ -92,4 +96,5 @@ public class VentanaCliente extends JFrame {
             dispose();
         });
     }
+
 }
