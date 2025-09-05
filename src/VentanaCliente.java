@@ -1,104 +1,95 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class VentanaCliente extends JFrame {
     private SistemaBanco sistema;
     private JTextField txtDni, txtNom, txtApell;
-    private JButton btnCrear, btnVerClientes;
-
-    //Llamar ala clase de ordenamiento
-    private Ordenamiento ordenamiento= new Ordenamiento();
+    private JPasswordField txtContraseña;
+    private JButton btnCrear, btnVerClientes, btnVolver;
 
     public VentanaCliente(SistemaBanco sistema) {
-        this.sistema=sistema;
+        this.sistema = sistema;
         setTitle("Crear Cliente");
-        setSize(600, 420);
+        setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
+        setLocationRelativeTo(null);
 
-        JLabel lblDni = new JLabel("DNI:");
-        lblDni.setBounds(20, 20, 100, 25);
-        add(lblDni);
+        // Usar BorderLayout como contenedor principal
+        setLayout(new BorderLayout(10, 10));
 
+        // Panel principal con márgenes
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Panel para el formulario (Centro)
+        JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 10, 10));
+
+        panelFormulario.add(new JLabel("DNI:"));
         txtDni = new JTextField();
-        txtDni.setBounds(120, 20, 120, 25);
-        add(txtDni);
+        panelFormulario.add(txtDni);
 
-        JLabel lblNom = new JLabel("Nombre:");
-        lblNom.setBounds(20, 60, 100, 25);
-        add(lblNom);
-
+        panelFormulario.add(new JLabel("Nombre:"));
         txtNom = new JTextField();
-        txtNom.setBounds(120, 60, 120, 25);
-        add(txtNom);
+        panelFormulario.add(txtNom);
 
-        JLabel lblApell = new JLabel("Apellido:");
-        lblApell.setBounds(20, 100, 100, 25);
-        add(lblApell);
-
+        panelFormulario.add(new JLabel("Apellido:"));
         txtApell = new JTextField();
-        txtApell.setBounds(120, 100, 120, 25);
-        add(txtApell);
+        panelFormulario.add(txtApell);
 
-        JLabel lblContraseña = new JLabel("Ingrese Contraseña");
-        lblContraseña.setBounds(20,140,100,25);
-        add(lblContraseña);
+        panelFormulario.add(new JLabel("Contraseña:"));
+        txtContraseña = new JPasswordField();
+        panelFormulario.add(txtContraseña);
 
-        JPasswordField txtContraseña = new JPasswordField();
-        txtContraseña.setBounds(120, 140,120,25);
-        add(txtContraseña);
+        panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
 
-        //Inicializacion de botones
-        btnVerClientes= new JButton("Ver Clientes");
-        btnVerClientes.setBounds(80,180,140,30);
-        add(btnVerClientes);
+        // Panel para botones (Sur)
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         btnCrear = new JButton("Crear Cliente");
-        btnCrear.setBounds(80, 220, 140, 30);
-        add(btnCrear);
-        // Evento del botón
-        btnCrear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int idcli =  (int) (Math.random()*1000);
-                    int dni = Integer.parseInt(txtDni.getText());
-                    String nom = txtNom.getText();
-                    String apell = txtApell.getText();
+        btnVerClientes = new JButton("Ver Clientes");
+        btnVolver = new JButton("Regresar");
 
-                    Cliente nuevoCliente = new Cliente(idcli, dni, nom, apell);
-                    ordenamiento.Implementacion(nuevoCliente);
+        panelBotones.add(btnCrear);
+        panelBotones.add(btnVerClientes);
+        panelBotones.add(btnVolver);
 
-                    JOptionPane.showMessageDialog(null,
-                            "Cliente creado:\n" + nuevoCliente.toString());
+        panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
 
-                    //Limpieza de Casilleros
-                    txtApell.setText("");
-                    txtDni.setText("");
-                    txtNom.setText("");
+        add(panelPrincipal, BorderLayout.CENTER);
 
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "DNI inválido");
-                }
+        // Eventos (mantener igual)
+        btnCrear.addActionListener(e -> {
+            try {
+                int idcli = (int) (Math.random() * 1000);
+                int dni = Integer.parseInt(txtDni.getText());
+                String nom = txtNom.getText();
+                String apell = txtApell.getText();
+
+                Cliente nuevoCliente = new Cliente(idcli, dni, nom, apell);
+                sistema.getOrdenamiento().Implementacion(nuevoCliente);
+
+                JOptionPane.showMessageDialog(null, "Cliente creado:\n" + nuevoCliente.toString());
+
+                txtApell.setText("");
+                txtDni.setText("");
+                txtNom.setText("");
+                txtContraseña.setText("");
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "DNI inválido");
             }
         });
-        // Evento para ver clientes ordenados
-        btnVerClientes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String lista = ordenamiento.listaFormateada();
-                JOptionPane.showMessageDialog(null, lista);
-            }
-        });
-        JButton btnVolver = new JButton("Regresar ");
-        btnVolver.setBounds(100,200,150,30);
-        add(btnVolver);
 
-        btnVolver.addActionListener( e -> {
-            Menu inicio = new Menu();
+        btnVerClientes.addActionListener(e -> {
+            String lista = sistema.getOrdenamiento().listaFormateada();
+            JOptionPane.showMessageDialog(null, lista);
+        });
+
+        btnVolver.addActionListener(e -> {
+            Menu inicio = new Menu(sistema);
             inicio.setVisible(true);
             dispose();
         });
-        setLayout(null);
     }
 }

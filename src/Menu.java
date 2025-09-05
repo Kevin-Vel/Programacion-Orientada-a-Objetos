@@ -4,8 +4,8 @@ import java.awt.*;
 public class Menu extends JFrame {
     private SistemaBanco sistema;
 
-    public Menu() {
-        sistema = new SistemaBanco();
+    public Menu(SistemaBanco sistema) {
+        this.sistema = new SistemaBanco();
         //Interfaz de Pantalla
         setTitle("Hola, biienvenido ala Banca Digital");
         setSize(400, 200);
@@ -30,20 +30,20 @@ public class Menu extends JFrame {
 
         //acciones
         btnCliente.addActionListener(e ->{
-            VentanaCliente ventana=new VentanaCliente(sistema);
+            VentanaCliente ventana=new VentanaCliente(this.sistema);
             ventana.setVisible(true);
             dispose();
         });
 
         btnIniciar.addActionListener(e -> {
-            VentanaIniciar iniciar = new VentanaIniciar(sistema);
+            VentanaIniciar iniciar = new VentanaIniciar(this.sistema);
             iniciar.setVisible(true);
             dispose(); // para cerrar la ventana actual si quieres
         });
         btnSalir.addActionListener( e ->
                 System.exit(0));
         btnVerClientes.addActionListener(e -> {
-            String lista = sistema.getOrdenamiento().listaFormateada();
+            String lista = this.sistema.getOrdenamiento().listaFormateada();
             JOptionPane.showMessageDialog(this, lista, "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
         });
     }
