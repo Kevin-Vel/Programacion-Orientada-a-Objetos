@@ -33,7 +33,10 @@ public class VentanaIniciar extends JFrame {
         // Panel para el botón
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton btnIniciar = new JButton("Iniciar Sesión");
+        JButton btnRegresar = new JButton("Regresar");
+
         panelBoton.add(btnIniciar);
+        panelBoton.add(btnRegresar);
 
         panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
 
@@ -49,7 +52,7 @@ public class VentanaIniciar extends JFrame {
 
                 if (ConsolaContraseñas.verificarPassword(dni, password)) {
                     JOptionPane.showMessageDialog(this, "¡Inicio de sesión exitoso!");
-                    // Aquí puedes abrir la ventana principal del banco
+                    // Aquí va abrir la ventana principal del banco
                     // new VentanaPrincipal(sistema).setVisible(true);
                     // dispose(); // Cerrar ventana de inicio de sesión
                 } else {
@@ -58,6 +61,12 @@ public class VentanaIniciar extends JFrame {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese un DNI válido");
             }
+
+        });
+        btnRegresar.addActionListener(e ->{
+            Menu menu= new Menu(sistema);
+            menu.setVisible(true);
+            dispose();
         });
     }
 }

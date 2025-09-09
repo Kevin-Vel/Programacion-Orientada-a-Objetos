@@ -57,24 +57,29 @@ public class VentanaCliente extends JFrame {
         panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
 
         add(panelPrincipal, BorderLayout.CENTER);
-        //Filtros
+
+        // Filtros
         PatrondeIngreso.soloNumeros(txtDni, 8);
         PatrondeIngreso.soloLetras(txtNom);
         PatrondeIngreso.soloLetras(txtApell);
 
-        // Eventos (mantener igual)
+        // Eventos
         btnCrear.addActionListener(e -> {
             try {
-                int idclie=(int)(Math.random()*1000);
-                int dni= Integer.parseInt(txtDni.getText());
-                String nom= PatrondeIngreso.formatearNombre(txtNom.getText());
-                String apell= PatrondeIngreso.formatearNombre(txtApell.getText());
+                int idclie = (int)(Math.random() * 1000);
+                int dni = Integer.parseInt(txtDni.getText());
+                String nom = PatrondeIngreso.formatearNombre(txtNom.getText());
+                String apell = PatrondeIngreso.formatearNombre(txtApell.getText());
+                String contra = new String(txtContraseña.getPassword());
 
-                // Creacion Cliente
-                Cliente nuevoCLiente = new Cliente(idclie,dni,nom,apell);
-                sistema.getOrdenamiento().Implementacion(nuevoCLiente);
+                // CORRECCIÓN: Esta línea tenía un error de sintaxis
+                ConsolaContraseñas.guardarContraseña(dni, contra);
 
-                JOptionPane.showMessageDialog(null,"Cliente Creado:\n"+nuevoCLiente.toString());
+                // Creación Cliente
+                Cliente nuevoCliente = new Cliente(idclie, dni, nom, apell);
+                sistema.getOrdenamiento().Implementacion(nuevoCliente);
+
+                JOptionPane.showMessageDialog(null, "Cliente Creado:\n" + nuevoCliente.toString());
                 txtDni.setText("");
                 txtNom.setText("");
                 txtApell.setText("");
@@ -96,5 +101,4 @@ public class VentanaCliente extends JFrame {
             dispose();
         });
     }
-
 }
