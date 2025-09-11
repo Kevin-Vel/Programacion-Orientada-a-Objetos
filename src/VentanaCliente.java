@@ -72,7 +72,7 @@ public class VentanaCliente extends JFrame {
                 String apell = PatrondeIngreso.formatearNombre(txtApell.getText());
                 String contra = new String(txtContraseña.getPassword());
 
-                // CORRECCIÓN: Esta línea tenía un error de sintaxis
+                // GUARDAR CONTRASEÑA
                 ConsolaContraseñas.guardarContraseña(dni, contra);
 
                 // Creación Cliente
