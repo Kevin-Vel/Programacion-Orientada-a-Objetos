@@ -30,8 +30,8 @@ public class VentanaIniciar extends JFrame {
 
         panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
 
-        // Panel para el botón
-        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // Panel para los botones
+        JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton btnIniciar = new JButton("Iniciar Sesión");
         JButton btnRegresar = new JButton("Regresar");
 
@@ -45,26 +45,39 @@ public class VentanaIniciar extends JFrame {
         // Aplicar validación de solo números al campo DNI
         PatrondeIngreso.soloNumeros(txtDni, 8);
 
+        // Evento para el botón Iniciar Sesión
         btnIniciar.addActionListener(e -> {
             try {
                 int dni = Integer.parseInt(txtDni.getText());
                 String password = new String(txtPassword.getPassword());
 
                 if (ConsolaContraseñas.verificarPassword(dni, password)) {
-                    JOptionPane.showMessageDialog(this, "¡Inicio de sesión exitoso!");
-                    // Aquí va abrir la ventana principal del banco
-                    // new VentanaPrincipal(sistema).setVisible(true);
-                    // dispose(); // Cerrar ventana de inicio de sesión
+                    // Buscar el cliente en el sistema
+                    Cliente cliente = sistema.buscarPorDni(dni);
+
+                    if (cliente != null) {
+                        JOptionPane.showMessageDialog(this, "¡Inicio de sesión exitoso!");
+
+                        // Cerrar la ventana de inicio de sesión
+                        dispose();
+
+                        // Abrir la ventana principal del cliente
+                        VentanaPrincipalCliente ventanaPrincipal = new VentanaPrincipalCliente(sistema, cliente);
+                        ventanaPrincipal.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Cliente no encontrado en el sistema");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "DNI o contraseña incorrectos");
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese un DNI válido");
             }
-
         });
-        btnRegresar.addActionListener(e ->{
-            Menu menu= new Menu(sistema);
+
+        // Evento para el botón Regresar
+        btnRegresar.addActionListener(e -> {
+            Menu menu = new Menu(sistema);
             menu.setVisible(true);
             dispose();
         });
