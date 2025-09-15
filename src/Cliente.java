@@ -13,7 +13,7 @@ public class Cliente {
     public String getContraseña(){return contraseña;}
     public String getNom() {return nom;}
     public String getApell(){return apell;}
-    public int getIdcli(){return idcli;}
+    public int getIdclie(){return idcli;}
     public int getDni(){return dni;}
 
     public void setNom(String nom){this.nom=nom;}
