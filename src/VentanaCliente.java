@@ -91,10 +91,13 @@ public class VentanaCliente extends JFrame {
         });
 
         btnVerClientes.addActionListener(e -> {
+            // Establecer criterio de ordenamiento (puedes hacerlo seleccionable por el usuario)
+            sistema.getOrdenamiento().setCriterioOrdenamiento("dni"); // o "nombre", "apellido"
+
+            // Obtener lista formateada (usará ordenamiento externo si es necesario)
             String lista = sistema.getOrdenamiento().listaFormateada();
             JOptionPane.showMessageDialog(null, lista);
         });
-
 
 
         btnVolver.addActionListener(e -> {
