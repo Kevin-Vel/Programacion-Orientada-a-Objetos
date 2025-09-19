@@ -3,14 +3,14 @@ import java.util.*;
 
 public class Ordenamiento {
     private List<Cliente> listaCliente = new ArrayList<>();
-    private static final int UMBRAL_ORDENAMIENTO_EXTERNO = 10000; // Umbral para usar ordenamiento externo
-    private Comparator<String> criterioOrdenamiento = OrdenamientoExterno.comparadorPorNombre(); // Criterio por defecto
+    private static final int UMBRAL_ORDENAMIENTO_EXTERNO = 10000;
+    private Comparator<String> criterioOrdenamiento = OrdenamientoExterno.comparadorPorNombre();
 
-    // Método existente - ordenamiento en memoria por nombre
+    // Método existente - ordenamiento en memoria por nombre (CORREGIDO)
     public void Implementacion(Cliente nuevoCliente) {
         int i = 0;
         while (i < listaCliente.size() &&
-                listaCliente.get(i).getNom().compareToIgnoreCase(nuevoCliente.getNom()) < 0) {
+                listaCliente.get(i).getNombre().compareToIgnoreCase(nuevoCliente.getNombre()) < 0) {
             i++;
         }
         listaCliente.add(i, nuevoCliente);
@@ -94,7 +94,7 @@ public class Ordenamiento {
         }
     }
 
-    // Métodos auxiliares existentes (sin cambios)
+    // Métodos auxiliares (CORREGIDOS)
     public void guardarEnArchivo(String nombreArchivo) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(nombreArchivo))) {
             for (Cliente cliente : listaCliente) {
@@ -117,10 +117,11 @@ public class Ordenamiento {
     }
 
     private String clienteToCSV(Cliente cliente) {
+        // CORREGIDO: Usar los métodos correctos de la clase Cliente
         return cliente.getIdclie() + "," +
                 cliente.getDni() + "," +
-                cliente.getNom() + "," +
-                cliente.getApell();
+                cliente.getNombre() + "," +  // Cambiado de getNom() a getNombre()
+                cliente.getApellido();       // Cambiado de getApell() a getApellido()
     }
 
     private Cliente csvToCliente(String csvLine) {

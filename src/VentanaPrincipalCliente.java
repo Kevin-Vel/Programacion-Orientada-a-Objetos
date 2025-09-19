@@ -9,7 +9,7 @@ public class VentanaPrincipalCliente extends JFrame {
         this.sistema = sistema;
         this.cliente = cliente;
 
-        setTitle("Ventana Principal - " + cliente.getNom());
+        setTitle("Ventana Principal - " + cliente.getNombre());
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -17,7 +17,7 @@ public class VentanaPrincipalCliente extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNom() + " " + cliente.getApell());
+        JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNombre() + " " + cliente.getApellido());
         panel.add(lblBienvenida, BorderLayout.NORTH);
 
         // Aquí puedes agregar más componentes para las operaciones bancarias
