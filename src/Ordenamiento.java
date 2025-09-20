@@ -120,19 +120,23 @@ public class Ordenamiento {
         // CORREGIDO: Usar los métodos correctos de la clase Cliente
         return cliente.getIdclie() + "," +
                 cliente.getDni() + "," +
-                cliente.getNombre() + "," +  // Cambiado de getNom() a getNombre()
-                cliente.getApellido();       // Cambiado de getApell() a getApellido()
+                cliente.getNombre() + "," +
+                cliente.getApellido() + ","+
+                cliente.getContraseña();
     }
 
     private Cliente csvToCliente(String csvLine) {
         try {
             String[] partes = csvLine.split(",");
-            if (partes.length == 4) {
+            if (partes.length == 5) { // Ahora son 5 campos
                 int id = Integer.parseInt(partes[0]);
                 int dni = Integer.parseInt(partes[1]);
                 String nombre = partes[2];
                 String apellido = partes[3];
-                return new Cliente(id, dni, nombre, apellido);
+                String contraseña = partes[4];
+                Cliente cliente = new Cliente(id, dni, nombre, apellido);
+                cliente.setContraseña(contraseña);
+                return cliente;
             }
         } catch (NumberFormatException e) {
             System.err.println("Error al parsear línea: " + csvLine);

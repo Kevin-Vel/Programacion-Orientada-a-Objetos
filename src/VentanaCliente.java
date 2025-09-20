@@ -73,15 +73,10 @@ public class VentanaCliente extends JFrame {
                 String contra = new String(txtContraseña.getPassword());
 
                 // Creación Cliente
-                Cliente nuevoCliente = new Cliente(idclie, dni, nom, apell);
-                sistema.getOrdenamiento().Implementacion(nuevoCliente);
+                Cliente nuevoCliente= sistema.crearCliente(idclie, dni,nom,apell,contra);
 
                 // GUARDAR CONTRASEÑA
-                ConsolaContraseñas.guardarContraseña(dni, contra);
-                nuevoCliente.setContraseña(contra);
-
-                //Guardar CLiente ene el sistema
-                sistema.getOrdenamiento().Implementacion(nuevoCliente);
+                ConsolaContraseñas.guardarContraseña(dni,contra);
 
                 JOptionPane.showMessageDialog(null, "Cliente Creado:\n" + nuevoCliente.toString());
                 txtDni.setText("");

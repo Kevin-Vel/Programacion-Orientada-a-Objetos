@@ -1,4 +1,7 @@
-public class Cuenta {
+import java.io.Serializable;
+
+public class Cuenta implements Serializable {
+    private  static final   long serialVersionUID=1L;
     private int numCuenta;
     private String tipCuenta;
     private double saldo;
