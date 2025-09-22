@@ -9,20 +9,36 @@ public class VentanaPrincipalCliente extends JFrame {
         this.sistema = sistema;
         this.cliente = cliente;
 
-        setTitle("Ventana Principal - " + cliente.getNombre());
-        setSize(600, 400);
+        setTitle("Banco XYZ - Cliente: " + cliente.getNombre() + " " + cliente.getApellido());
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout(10, 10));
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+        // Panel superior con información del cliente
+        JPanel panelSuperior = crearPanelSuperior();
+        add(panelSuperior, BorderLayout.NORTH);
+
+        setVisible(true);
+    }
+
+    private JPanel crearPanelSuperior() {
+        JPanel panelSuperior = new JPanel(new GridLayout(4, 1, 5, 5));
 
         JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNombre() + " " + cliente.getApellido());
-        panel.add(lblBienvenida, BorderLayout.NORTH);
+        lblBienvenida.setFont(new Font("Arial", Font.BOLD, 16));
 
-        // Aquí puedes agregar más componentes para las operaciones bancarias
+        JLabel lblId = new JLabel("ID Cliente: " + cliente.getIdclie());
+        JLabel lblDni = new JLabel("DNI: " + cliente.getDni());
 
-        add(panel);
-        setVisible(true); // Asegúrate de hacer visible la ventana
+        // 
+        JLabel lblContra = new JLabel("Contraseña: " + cliente.getContraseña());
+
+        panelSuperior.add(lblBienvenida);
+        panelSuperior.add(lblId);
+        panelSuperior.add(lblDni);
+        panelSuperior.add(lblContra);
+
+        return panelSuperior;
     }
 }
