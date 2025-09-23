@@ -56,6 +56,14 @@ public class VentanaIniciar extends JFrame {
                     Cliente cliente = sistema.buscarPorDni(dni);
 
                     if (cliente != null) {
+                        // ✅ VALIDACIÓN CRÍTICA: Verificar que el cliente tenga cuenta
+                        if (cliente.getCuenta() == null) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Error: El cliente no tiene una cuenta asociada.\n" +
+                                            "Por favor, contacte con el administrador del sistema.");
+                            return; // No continuar
+                        }
+
                         JOptionPane.showMessageDialog(this, "¡Inicio de sesión exitoso!");
 
                         // Cerrar la ventana de inicio de sesión
