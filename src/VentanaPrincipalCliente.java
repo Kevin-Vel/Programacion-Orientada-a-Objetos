@@ -4,41 +4,25 @@ import java.awt.*;
 public class VentanaPrincipalCliente extends JFrame {
     private SistemaBanco sistema;
     private Cliente cliente;
+    private JLabel lblSaldo;
+    private JTextArea areaTransacciones;
 
     public VentanaPrincipalCliente(SistemaBanco sistema, Cliente cliente) {
-        this.sistema = sistema;
-        this.cliente = cliente;
+        // ... (código anterior de la Parte 1)
 
-        setTitle("Banco XYZ - Cliente: " + cliente.getNombre() + " " + cliente.getApellido());
-        setSize(700, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout(10, 10));
-
-        // Panel superior con información del cliente
-        JPanel panelSuperior = crearPanelSuperior();
-        add(panelSuperior, BorderLayout.NORTH);
+        // Panel central con área de transacciones
+        JScrollPane panelCentral = crearPanelCentral();
+        add(panelCentral, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
-    private JPanel crearPanelSuperior() {
-        JPanel panelSuperior = new JPanel(new GridLayout(4, 1, 5, 5));
+    // ... (método crearPanelSuperior de la Parte 1)
 
-        JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNombre() + " " + cliente.getApellido());
-        lblBienvenida.setFont(new Font("Arial", Font.BOLD, 16));
-
-        JLabel lblId = new JLabel("ID Cliente: " + cliente.getIdclie());
-        JLabel lblDni = new JLabel("DNI: " + cliente.getDni());
-
-        // 
-        JLabel lblContra = new JLabel("Contraseña: " + cliente.getContraseña());
-
-        panelSuperior.add(lblBienvenida);
-        panelSuperior.add(lblId);
-        panelSuperior.add(lblDni);
-        panelSuperior.add(lblContra);
-
-        return panelSuperior;
+    private JScrollPane crearPanelCentral() {
+        areaTransacciones = new JTextArea();
+        areaTransacciones.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(areaTransacciones);
+        return scrollPane;
     }
 }
