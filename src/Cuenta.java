@@ -7,7 +7,7 @@ public class Cuenta implements Serializable {
     private double saldo;
     private Cliente cliente;
 
-    public Cuenta (int numCuenta, String tipCuenta, double saldo, Cliente cliente){
+    public Cuenta (){
         this.numCuenta=numCuenta;
         this.tipCuenta=tipCuenta;
         this.saldo=saldo;
@@ -23,5 +23,4 @@ public class Cuenta implements Serializable {
     public void setTipCuenta(String tipCuenta){this.tipCuenta=tipCuenta;}
     public void setSaldo(double saldo){this.saldo=saldo;}
     public void setCliente(Cliente cliente){this.cliente=cliente;}
-    
 }

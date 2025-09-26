@@ -134,7 +134,7 @@ public class Ordenamiento {
                 String nombre = partes[2];
                 String apellido = partes[3];
                 String contraseña = partes[4];
-                Cliente cliente = new Cliente(id, dni, nombre, apellido);
+                Cliente cliente = new Cliente(id, dni, nombre, apellido, contraseña);
                 cliente.setContraseña(contraseña);
                 return cliente;
             }

@@ -58,12 +58,14 @@ public class VentanaIniciar extends JFrame {
                     if (cliente != null) {
                         // ✅ VALIDACIÓN CRÍTICA: Verificar que el cliente tenga cuenta
                         if (cliente.getCuenta() == null) {
-                            JOptionPane.showMessageDialog(this,
-                                    "Error: El cliente no tiene una cuenta asociada.\n" +
-                                            "Por favor, contacte con el administrador del sistema.");
-                            return; // No continuar
-                        }
+                            // 🔹 Crear y asociar cuenta nueva automáticamente
+                            Cuenta nuevaCuenta = new Cuenta();
+                            cliente.setCuenta(nuevaCuenta);
+                            sistema.getCuentas().add(nuevaCuenta);
 
+                            JOptionPane.showMessageDialog(this,
+                                    "No tenías una cuenta asociada, se ha creado una nueva automáticamente.");
+                        }
                         JOptionPane.showMessageDialog(this, "¡Inicio de sesión exitoso!");
 
                         // Cerrar la ventana de inicio de sesión

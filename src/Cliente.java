@@ -8,12 +8,12 @@ public class Cliente extends Persona implements Serializable {
     private String contraseña;
 
     // Constructor
-    public Cliente(int idclie, int dni, String nom, String apell) {
+    public Cliente(int idclie, int dni, String nom, String apell, String contraseña) {
         super(nom, apell);
-        this.cuenta= cuenta;
         this.idcli = idclie;
         this.dni = dni;
-        this.contraseña = "";
+        this.contraseña = this.contraseña;
+        this.cuenta = new Cuenta();
     }
 
     public Cuenta getCuenta(){return cuenta;}
@@ -22,7 +22,7 @@ public class Cliente extends Persona implements Serializable {
     public String getContraseña() { return contraseña; }
 
     public void setContraseña(String contraseña) { this.contraseña = contraseña; }
-
+    public void setCuenta(Cuenta cuenta){this.cuenta=cuenta;}
     @Override
     public String mostrarInfo() {
         return "Cliente: " + idcli + " - DNI: " + dni + " - " + nombre + " " + apellido;
