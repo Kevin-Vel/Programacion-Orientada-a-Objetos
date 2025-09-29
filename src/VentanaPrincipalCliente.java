@@ -6,6 +6,8 @@ public class VentanaPrincipalCliente extends JFrame {
     private Cliente cliente;
     private JLabel lblSaldo;
 
+
+
     public VentanaPrincipalCliente(SistemaBanco sistema, Cliente cliente) {
         this.sistema = sistema;
         this.cliente = cliente;
@@ -23,10 +25,15 @@ public class VentanaPrincipalCliente extends JFrame {
         // Panel principal con BorderLayout
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
+        JButton btnCerrarSesion = new JButton("Cerrar Sesion");
+        btnCerrarSesion.addActionListener(e -> cerrarSesion());
+
         // Panel superior con información del cliente
         JPanel panelSuperior = new JPanel(new GridLayout(4, 1));
         JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNombre() + " " + cliente.getApellido());
         lblBienvenida.setFont(new Font("Arial", Font.BOLD, 16));
+
+        panelSuperior.add(btnCerrarSesion);
 
         JLabel lblDni = new JLabel("DNI: " + cliente.getDni());
         lblDni.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -44,4 +51,13 @@ public class VentanaPrincipalCliente extends JFrame {
         add(panel);
         setVisible(true);
     }
+
+    private void cerrarSesion() {
+        dispose();
+
+        SwingUtilities.invokeLater(()->{
+            new VentanaIniciar(sistema).setVisible(true);
+        });
+    }
+
 }
