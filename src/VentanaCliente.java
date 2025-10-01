@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class VentanaCliente extends JFrame {
     private SistemaBanco sistema;
@@ -58,7 +57,7 @@ public class VentanaCliente extends JFrame {
 
         add(panelPrincipal, BorderLayout.CENTER);
 
-        // Filtros
+        // Validadores (Patrón de Ingreso)
         PatrondeIngreso.soloNumeros(txtDni, 8);
         PatrondeIngreso.soloLetras(txtNom);
         PatrondeIngreso.soloLetras(txtApell);
@@ -66,19 +65,21 @@ public class VentanaCliente extends JFrame {
         // Eventos
         btnCrear.addActionListener(e -> {
             try {
-                int idclie = (int)(Math.random() * 1000);
+                int idclie = (int) (Math.random() * 1000);
                 int dni = Integer.parseInt(txtDni.getText());
                 String nom = PatrondeIngreso.formatearNombre(txtNom.getText());
                 String apell = PatrondeIngreso.formatearNombre(txtApell.getText());
                 String contra = new String(txtContraseña.getPassword());
 
                 // Creación Cliente
-                Cliente nuevoCliente= sistema.crearCliente(idclie, dni,nom,apell,contra);
+                Cliente nuevoCliente = sistema.crearCliente(idclie, dni, nom, apell, contra);
 
-                // GUARDAR CONTRASEÑA
-                ConsolaContraseñas.guardarContraseña(dni,contra);
+                // Guardar contraseña
+                ConsolaContraseñas.guardarContraseña(dni, contra);
 
                 JOptionPane.showMessageDialog(null, "Cliente Creado:\n" + nuevoCliente.toString());
+
+                // Limpiar campos
                 txtDni.setText("");
                 txtNom.setText("");
                 txtApell.setText("");
@@ -90,14 +91,10 @@ public class VentanaCliente extends JFrame {
         });
 
         btnVerClientes.addActionListener(e -> {
-            // Establecer criterio de ordenamiento (puedes hacerlo seleccionable por el usuario)
             sistema.getOrdenamiento().setCriterioOrdenamiento("dni"); // o "nombre", "apellido"
-
-            // Obtener lista formateada (usará ordenamiento externo si es necesario)
             String lista = sistema.getOrdenamiento().listaFormateada();
             JOptionPane.showMessageDialog(null, lista);
         });
-
 
         btnVolver.addActionListener(e -> {
             Menu inicio = new Menu(sistema);

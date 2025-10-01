@@ -22,10 +22,9 @@ public class VentanaPrincipalCliente extends JFrame {
 
         // Panel principal con BorderLayout
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
         // Panel superior con información del cliente
-        JPanel panelSuperior = new JPanel(new GridLayout(3, 1,5,5));
+        JPanel panelSuperior = new JPanel(new GridLayout(4, 1));
         JLabel lblBienvenida = new JLabel("Bienvenido, " + cliente.getNombre() + " " + cliente.getApellido());
         lblBienvenida.setFont(new Font("Arial", Font.BOLD, 16));
 
@@ -35,20 +34,24 @@ public class VentanaPrincipalCliente extends JFrame {
         lblSaldo = new JLabel("Saldo actual: $" + cliente.getCuenta().getSaldo());
         lblSaldo.setFont(new Font("Arial", Font.PLAIN, 14));
 
+        // Botón de cerrar sesión
+        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
+        btnCerrarSesion.addActionListener(e -> cerrarSesion());
+
+        panelSuperior.add(btnCerrarSesion);
         panelSuperior.add(lblBienvenida);
         panelSuperior.add(lblDni);
         panelSuperior.add(lblSaldo);
 
         panel.add(panelSuperior, BorderLayout.NORTH);
 
-        // 🔹 Panel inferior con botón Cerrar Sesión
-        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
-        btnCerrarSesion.addActionListener(e -> cerrarSesion());
-        panelInferior.add(btnCerrarSesion);
+        // 🔹 Nuevo botón “Actualizar saldo” en la parte inferior
+        JButton btnActualizar = new JButton("Actualizar Saldo");
+        btnActualizar.addActionListener(e -> actualizarSaldo());
 
-        panel.add(panelInferior, BorderLayout.SOUTH);
+        panel.add(btnActualizar, BorderLayout.SOUTH);
 
+        // Mostrar solo los datos por ahora
         add(panel);
         setVisible(true);
     }
@@ -58,5 +61,10 @@ public class VentanaPrincipalCliente extends JFrame {
         SwingUtilities.invokeLater(() -> {
             new VentanaIniciar(sistema).setVisible(true);
         });
+    }
+
+    // 🔹 Método para refrescar el saldo en la etiqueta
+    private void actualizarSaldo() {
+        lblSaldo.setText("Saldo actual: $" + cliente.getCuenta().getSaldo());
     }
 }
