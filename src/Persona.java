@@ -17,5 +17,7 @@ public abstract class Persona implements Serializable {
     public void setApellido(String apellido) {this.apellido = apellido;}
 
     public abstract String mostrarInfo();
+
+
 }
 
