@@ -1,7 +1,8 @@
 import java.io.Serializable;
 
 public class Cliente extends Persona implements Serializable {
-    private  static final   long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
+
     private Cuenta cuenta;
     private int idcli;
     private int dni;
@@ -12,17 +13,18 @@ public class Cliente extends Persona implements Serializable {
         super(nom, apell);
         this.idcli = idclie;
         this.dni = dni;
-        this.contraseña = this.contraseña;
+        this.contraseña = contraseña;  // ✅ corregido
         this.cuenta = new Cuenta();
     }
 
-    public Cuenta getCuenta(){return cuenta;}
+    public Cuenta getCuenta() { return cuenta; }
     public int getIdclie() { return idcli; }
     public int getDni() { return dni; }
     public String getContraseña() { return contraseña; }
 
     public void setContraseña(String contraseña) { this.contraseña = contraseña; }
-    public void setCuenta(Cuenta cuenta){this.cuenta=cuenta;}
+    public void setCuenta(Cuenta cuenta) { this.cuenta = cuenta; }
+
     @Override
     public String mostrarInfo() {
         return "Cliente: " + idcli + " - DNI: " + dni + " - " + nombre + " " + apellido;
@@ -33,5 +35,3 @@ public class Cliente extends Persona implements Serializable {
         return idcli + " " + dni + " - " + nombre + " - " + apellido;
     }
 }
-
-
