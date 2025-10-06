@@ -7,7 +7,14 @@ public class Cuenta implements Serializable {
     private double saldo;
     private Cliente cliente;
 
-    public Cuenta (){
+    public Cuenta(){
+        this.numCuenta=0;
+        this.tipCuenta= TipoCuenta.DEBITO;
+        this.saldo=0.0;
+        this.cliente=null;
+    }
+
+    public Cuenta (int numCuenta, TipoCuenta tipCuenta, double saldo, Cliente cliente){
         this.numCuenta=numCuenta;
         this.tipCuenta=tipCuenta;
         this.saldo=saldo;
