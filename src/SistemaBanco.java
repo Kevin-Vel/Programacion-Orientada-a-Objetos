@@ -16,12 +16,7 @@ public class SistemaBanco {
 
     public Cliente crearCliente(int idclie, int dni, String nom, String apell, String contraseña) {
         Cliente cliente = new Cliente(idclie, dni, nom, apell, contraseña);
-
-        // 🔹 Asignar una cuenta nueva y guardarla
-        Cuenta cuenta = new Cuenta();
-        cliente.setCuenta(cuenta);
-        cuentas.add(cuenta);
-
+        
         ordenamiento.Implementacion(cliente);
         guardarDatos();
         return cliente;
@@ -29,8 +24,8 @@ public class SistemaBanco {
 
 
 
-    public Cuenta crearCuenta(int numCuent, String tipCuenta, double saldo, Cliente cliente) {
-        Cuenta cuenta = new Cuenta();
+    public Cuenta crearCuenta(int numCuent, TipoCuenta tipoCuenta, double saldo, Cliente cliente) {
+        Cuenta cuenta = new Cuenta(numCuent, tipoCuenta, saldo, cliente);
         cuentas.add(cuenta);
         guardarDatos(); // Guardar después de agregar
         return cuenta;

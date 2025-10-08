@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public abstract class Persona implements Interfazes.PersonaInterface, Serializable {
+public abstract class Persona implements PersonaInterface, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected String nombre;

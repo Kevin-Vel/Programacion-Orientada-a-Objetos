@@ -5,6 +5,7 @@ public class VentanaCliente extends JFrame {
     private SistemaBanco sistema;
     private JTextField txtDni, txtNom, txtApell;
     private JPasswordField txtContraseña;
+    private JComboBox<String> comboTipoCueneta;
     private JButton btnCrear, btnVerClientes, btnVolver;
 
     public VentanaCliente(SistemaBanco sistema) {
@@ -40,9 +41,14 @@ public class VentanaCliente extends JFrame {
         txtContraseña = new JPasswordField();
         panelFormulario.add(txtContraseña);
 
+        panelFormulario.add(new JLabel("Tipo de cuenta"));
+        String[] tipos={"DEBITO", "CREDITO"};
+        comboTipoCueneta= new JComboBox<>(tipos);
         panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
 
-        // Panel para botones (Sur)
+        panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
+
+        // Panel para botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         btnCrear = new JButton("Crear Cliente");
@@ -71,8 +77,15 @@ public class VentanaCliente extends JFrame {
                 String apell = PatrondeIngreso.formatearNombre(txtApell.getText());
                 String contra = new String(txtContraseña.getPassword());
 
+                //Tipo de Cuenta selecionado
+                String tipoSelecionao = (String) comboTipoCueneta.getSelectedItem();
+                TipoCuenta tipoCuenta = tipoSelecionao.equals("CREDITO")
+                    ?TipoCuenta.CREDITO: TipoCuenta.DEBITO;
+
                 // Creación Cliente
                 Cliente nuevoCliente = sistema.crearCliente(idclie, dni, nom, apell, contra);
+                Cuenta nuevaCuenta= new Cuenta((int)(Math.random()*100000), tipoCuenta,0.0, nuevoCliente);
+                sistema.agregarCuenta(nuevaCuenta);
 
                 // Guardar contraseña
                 ConsolaContraseñas.guardarContraseña(dni, contra);
