@@ -1,2 +1,1 @@
-
-INTENTO FALLIDO DE CONEXION DE BASE DE DATOS
+El código usa un HashMap<Integer, String> que aplica un algoritmo de búsqueda por tabla hash (hashing). Este algoritmo convierte cada DNI en un número único usando hashCode(), y con él determina en qué posición interna (bucket) se guarda la contraseña. Al buscar con containsKey(dni) o get(dni), el mapa vuelve a calcular el hash del DNI, localiza el bucket correspondiente y compara las claves con equals() hasta hallar la coincidencia. Si la encuentra, devuelve la contraseña asociada. Este método permite acceder y verificar datos de forma muy rápida, en tiempo promedio constante O(1).
