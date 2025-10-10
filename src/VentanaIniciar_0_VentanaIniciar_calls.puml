@@ -1,0 +1,201 @@
+@startuml
+
+/' diagram meta data start
+config=CallConfiguration;
+{
+  "rootMethod": "VentanaIniciar#VentanaIniciar(SistemaBanco)",
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showMethodParametersTypes": false,
+    "showMethodParametersNames": false,
+    "showMethodReturnType": false,
+    "showPackageLevels": 2,
+    "showCallOrder": false,
+    "edgeMode": "MethodsOnly", // TypesOnly, MethodsOnly, TypesAndMethods, MethodsAndDirectTypeUsage
+    "showDetailedClassStructure": false
+  },
+  "rootClass": "VentanaIniciar",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="LR"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1483087911 { 
+   	label=SistemaBanco
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1674408910 { 
+   	label=SistemaBanco
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   SistemaBanco1483087911XXXbuscarPorDni104431[
+	label="+ buscarPorDni()"
+	style=filled
+	fillcolor=white
+	tooltip="SistemaBanco
+
+null"
+	fontcolor=darkgreen
+];
+} 
+} 
+
+subgraph cluster_1855727682 { 
+   	label=PatrondeIngreso
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_65628822 { 
+   	label=PatrondeIngreso
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   PatrondeIngreso1855727682XXXsoloNumeros653661896[
+	label="+ soloNumeros()"
+	style=filled
+	fillcolor=white
+	tooltip="PatrondeIngreso
+
+null"
+	fontcolor=darkgreen
+];
+} 
+} 
+
+subgraph cluster_344569309 { 
+   	label="ConsolaContraseñas"
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1857715826 { 
+   	label="ConsolaContraseñas"
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ConsolaContraseñas344569309XXXcargarPasswords0[
+	label="+ cargarPasswords()"
+	style=filled
+	fillcolor=white
+	tooltip="ConsolaContraseñas
+
+null"
+	fontcolor=darkgreen
+];
+
+ConsolaContraseñas344569309XXXverificarPassword1142137748[
+	label="+ verificarPassword()"
+	style=filled
+	fillcolor=white
+	tooltip="ConsolaContraseñas
+
+null"
+	fontcolor=darkgreen
+];
+} 
+} 
+
+subgraph cluster_956899100 { 
+   	label=VentanaIniciar
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_673152046 { 
+   	label=VentanaIniciar
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   VentanaIniciar956899100XXXVentanaIniciar1483087911[
+	label="+ VentanaIniciar()"
+	style=filled
+	fillcolor=white
+	tooltip="VentanaIniciar
+
+null"
+	penwidth=4
+	fontcolor=darkgreen
+];
+} 
+} 
+
+'edges    
+ConsolaContraseñas344569309XXXverificarPassword1142137748 -> ConsolaContraseñas344569309XXXcargarPasswords0;
+VentanaIniciar956899100XXXVentanaIniciar1483087911 -> ConsolaContraseñas344569309XXXverificarPassword1142137748;
+VentanaIniciar956899100XXXVentanaIniciar1483087911 -> PatrondeIngreso1855727682XXXsoloNumeros653661896;
+VentanaIniciar956899100XXXVentanaIniciar1483087911 -> SistemaBanco1483087911XXXbuscarPorDni104431;
+    
+}
+@enduml

@@ -31,6 +31,18 @@ public class SistemaBanco {
         return cuenta;
     }
 
+    //Metodo para implementar lo predeterminado
+    public void agregarCuenta(Cuenta cuenta) {
+        if (cuenta != null) {
+            cuentas.add(cuenta);
+            guardarDatos();
+            System.out.println("Cuenta agregada correctamente para el cliente: " + cuenta.getCliente().getNombre());
+        } else {
+            System.out.println("Error: la cuenta no puede ser nula.");
+        }
+    }
+
+
     public int iniciarSesion(int dni) {
         return dni;
     }
