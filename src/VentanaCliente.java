@@ -23,7 +23,7 @@ public class VentanaCliente extends JFrame {
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Panel para el formulario (Centro)
-        JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(5, 2, 10, 10));
 
         panelFormulario.add(new JLabel("DNI:"));
         txtDni = new JTextField();
@@ -44,7 +44,7 @@ public class VentanaCliente extends JFrame {
         panelFormulario.add(new JLabel("Tipo de cuenta"));
         String[] tipos={"DEBITO", "CREDITO"};
         comboTipoCueneta= new JComboBox<>(tipos);
-        panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
+        panelFormulario.add(comboTipoCueneta);
 
         panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
 
