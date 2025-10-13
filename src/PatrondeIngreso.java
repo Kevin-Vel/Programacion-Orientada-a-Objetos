@@ -20,23 +20,23 @@ public class PatrondeIngreso {
     }
 
     //Patron Letras
-    public static void soloLetras(JTextField campo){
-        ((AbstractDocument)campo.getDocument()).setDocumentFilter(new DocumentFilter(){
-            private final Pattern patron = Pattern.compile("[a-zA-ZAáéíóúñÑ]*");
+    public static void soloLetras(JTextField campo) {
+        ((AbstractDocument) campo.getDocument()).setDocumentFilter(new DocumentFilter() {
+            private final Pattern patron = Pattern.compile("[a-zA-ZáéíóúÁÉÍÓÚñÑ]*");
 
             @Override
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                throws BadLocationException{
-                if(text != null && patron.matcher(text).matches()){
-                    if (offset == 0 && !text.isEmpty()){
-                        text= text.substring(0,1).toUpperCase()+ (text.length()>1? text.substring(1):"");
+                    throws BadLocationException {
+                if (text != null && patron.matcher(text).matches()) {
+                    if (offset == 0 && !text.isEmpty()) {
+                        text = text.substring(0, 1).toUpperCase() + (text.length() > 1 ? text.substring(1) : "");
                     }
                     super.replace(fb, offset, length, text, attrs);
                 }
             }
-                                                                  }
-        );
+        });
     }
+
 
     // Verificacion de campo Numero
     public static boolean esSoloNumeros(JTextField campo){

@@ -44,7 +44,7 @@ public class VentanaIniciar extends JFrame {
 
         // Aplicar validación de solo números al campo DNI
         PatrondeIngreso.soloNumeros(txtDni, 8);
-
+        PatrondeIngreso.soloNumeros(txtPassword, 4);
         // Evento para el botón Iniciar Sesión
         btnIniciar.addActionListener(e -> {
             try {
