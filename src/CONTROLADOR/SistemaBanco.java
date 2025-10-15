@@ -28,6 +28,15 @@ public class SistemaBanco {
         return cliente;
     }
 
+    public Cliente buscarClientePorDni(int dni) {
+        for (Cliente c : ordenamiento.getListaCliente()) {
+            if (c.getDni() == dni) {
+                return c;
+            }
+        }
+        return null;
+    }
+
 
 
     public Cuenta crearCuenta(int numCuent, TipoCuenta tipoCuenta, double saldo, Cliente cliente) {
@@ -97,7 +106,7 @@ public class SistemaBanco {
         }
     }
 
-    private void guardarDatos() {
+    public void guardarDatos() {
         // Guardar clientes
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_CLIENTES))) {
             oos.writeObject(ordenamiento.getListaCliente());
@@ -113,12 +122,4 @@ public class SistemaBanco {
         } catch (IOException e) {
             System.err.println("Error al guardar cuentas: " + e.getMessage());
         }
-    }
-
-    // Método para limpiar datos (útil para pruebas)
-    public void limpiarDatos() {
-        ordenamiento.getListaCliente().clear();
-        cuentas.clear();
-        guardarDatos();
-    }
-}
+    }}

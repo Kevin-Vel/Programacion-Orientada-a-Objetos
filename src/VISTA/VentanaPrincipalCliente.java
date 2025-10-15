@@ -16,7 +16,7 @@ public class VentanaPrincipalCliente extends JFrame {
         this.sistema = sistema;
         this.cliente = cliente;
 
-        setTitle("Banco XYZ - MODELO.Cliente: " + cliente.getNombre());
+        setTitle("Banco XYZ - Cliente: " + cliente.getNombre());
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -51,26 +51,72 @@ public class VentanaPrincipalCliente extends JFrame {
 
         panel.add(panelSuperior, BorderLayout.NORTH);
 
-        // 🔹 Nuevo botón “Actualizar saldo” en la parte inferior
+        // 🔹 Panel central con botones de acciones
+        JPanel panelCentro = new JPanel(new GridLayout(1, 2, 10, 10));
+
+        JButton btnTransferir = new JButton("Transferir Dinero");
         JButton btnActualizar = new JButton("Actualizar Saldo");
+
+        panelCentro.add(btnTransferir);
+        panelCentro.add(btnActualizar);
+
+        panel.add(panelCentro, BorderLayout.CENTER);
+
+        // Eventos
         btnActualizar.addActionListener(e -> actualizarSaldo());
 
-        panel.add(btnActualizar, BorderLayout.SOUTH);
+        btnTransferir.addActionListener(e -> {
+            try {
+                // Pedir DNI del destinatario
+                String dniDestinoStr = JOptionPane.showInputDialog("Ingrese el DNI del destinatario:");
+                if (dniDestinoStr == null) return; // Cancelar
+                int dniDestino = Integer.parseInt(dniDestinoStr);
 
-        // Mostrar solo los datos por ahora
+                // Buscar cliente destino
+                Cliente destinatario = sistema.buscarClientePorDni(dniDestino);
+                if (destinatario == null) {
+                    JOptionPane.showMessageDialog(this, "Cliente no encontrado");
+                    return;
+                }
+
+                // Pedir monto
+                String montoStr = JOptionPane.showInputDialog("Ingrese el monto a transferir:");
+                if (montoStr == null) return; // Cancelar
+                double monto = Double.parseDouble(montoStr);
+
+                // Validar saldo
+                if (cliente.getCuenta().getSaldo() < monto) {
+                    JOptionPane.showMessageDialog(this, "Saldo insuficiente");
+                    return;
+                }
+
+                // Realizar transferencia
+                cliente.getCuenta().setSaldo(cliente.getCuenta().getSaldo() - monto);
+                destinatario.getCuenta().setSaldo(destinatario.getCuenta().getSaldo() + monto);
+
+                sistema.guardarDatos(); // 🔹 Guardar cambios
+
+                JOptionPane.showMessageDialog(this, "Transferencia realizada con éxito");
+
+                actualizarSaldo();
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Entrada inválida");
+            }
+        });
+
         add(panel);
         setVisible(true);
     }
 
     private void cerrarSesion() {
         dispose();
-        SwingUtilities.invokeLater(() -> {
-            new VentanaIniciar(sistema).setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new VentanaIniciar(sistema).setVisible(true));
     }
 
-    // 🔹 Método para refrescar el saldo en la etiqueta
     private void actualizarSaldo() {
         lblSaldo.setText("Saldo actual: $" + cliente.getCuenta().getSaldo());
     }
 }
+
+
