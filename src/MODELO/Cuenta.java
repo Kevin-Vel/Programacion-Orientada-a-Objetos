@@ -32,4 +32,18 @@ public class Cuenta implements Serializable {
     public void setTipCuenta(TipoCuenta tipCuenta){this.tipCuenta=tipCuenta;}
     public void setSaldo(double saldo){this.saldo=saldo;}
     public void setCliente(Cliente cliente){this.cliente=cliente;}
+
+    //Metodos para Transferir
+    public void depositar(double monto) {
+        if (monto > 0) {
+            saldo += monto;
+        }
+    }
+
+    public void retirar(double monto) {
+        if (monto > 0 && saldo >= monto) {
+            saldo -= monto;
+        }
+    }
+
 }

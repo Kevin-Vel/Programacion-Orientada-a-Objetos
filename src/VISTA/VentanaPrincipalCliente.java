@@ -52,7 +52,7 @@ public class VentanaPrincipalCliente extends JFrame {
         panel.add(panelSuperior, BorderLayout.NORTH);
 
         // 🔹 Panel central con botones de acciones
-        JPanel panelCentro = new JPanel(new GridLayout(1, 2, 10, 10));
+        JPanel panelCentro = new JPanel(new GridLayout(1, 2, 5, 5));
 
         JButton btnTransferir = new JButton("Transferir Dinero");
         JButton btnActualizar = new JButton("Actualizar Saldo");
@@ -65,45 +65,11 @@ public class VentanaPrincipalCliente extends JFrame {
         // Eventos
         btnActualizar.addActionListener(e -> actualizarSaldo());
 
+        // Enlace con la VentanaTransaccion
         btnTransferir.addActionListener(e -> {
-            try {
-                // Pedir DNI del destinatario
-                String dniDestinoStr = JOptionPane.showInputDialog("Ingrese el DNI del destinatario:");
-                if (dniDestinoStr == null) return; // Cancelar
-                int dniDestino = Integer.parseInt(dniDestinoStr);
-
-                // Buscar cliente destino
-                Cliente destinatario = sistema.buscarClientePorDni(dniDestino);
-                if (destinatario == null) {
-                    JOptionPane.showMessageDialog(this, "Cliente no encontrado");
-                    return;
-                }
-
-                // Pedir monto
-                String montoStr = JOptionPane.showInputDialog("Ingrese el monto a transferir:");
-                if (montoStr == null) return; // Cancelar
-                double monto = Double.parseDouble(montoStr);
-
-                // Validar saldo
-                if (cliente.getCuenta().getSaldo() < monto) {
-                    JOptionPane.showMessageDialog(this, "Saldo insuficiente");
-                    return;
-                }
-
-                // Realizar transferencia
-                cliente.getCuenta().setSaldo(cliente.getCuenta().getSaldo() - monto);
-                destinatario.getCuenta().setSaldo(destinatario.getCuenta().getSaldo() + monto);
-
-                sistema.guardarDatos(); // 🔹 Guardar cambios
-
-                JOptionPane.showMessageDialog(this, "Transferencia realizada con éxito");
-
-                actualizarSaldo();
-
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Entrada inválida");
-            }
+            new VentanaTransacciones(sistema, cliente).setVisible(true);
         });
+
 
         add(panel);
         setVisible(true);
