@@ -106,6 +106,16 @@ public class SistemaBanco {
         }
     }
 
+    //Guardar Transacciones (HISTORIAL)
+    public void registrarTransaccion(String descripcion) {
+        try (FileWriter fw = new FileWriter("transacciones.txt", true)) {
+            fw.write(descripcion + "\n");
+        } catch (IOException e) {
+            System.err.println("Error al registrar transacción: " + e.getMessage());
+        }
+    }
+
+
     public void guardarDatos() {
         // Guardar clientes
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_CLIENTES))) {

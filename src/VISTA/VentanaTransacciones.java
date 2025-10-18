@@ -78,11 +78,17 @@ public class VentanaTransacciones extends JFrame {
                 sistema.guardarDatos();
 
                 JOptionPane.showMessageDialog(this,
-                        "✅ Transferencia realizada con éxito.\n" +
+                        " Transferencia realizada con éxito.\n" +
                                 "Nuevo saldo: S/ " + cliente.getCuenta().getSaldo());
 
                 lblSaldo.setText("S/ " + cliente.getCuenta().getSaldo());
                 txtMonto.setText("");
+                
+                //Guardar Registro
+                sistema.registrarTransaccion(
+                        "Transferencia de S/ " + monto + " de " + cliente.getNombre() +
+                                " a " + destinatario.getNombre()
+                );
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "⚠️ Ingrese valores válidos.");
