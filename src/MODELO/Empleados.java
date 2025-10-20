@@ -1,6 +1,8 @@
 package MODELO;
 
-public class Empleados extends Persona {
+import java.io.Serializable;
+
+public class Empleados extends Persona implements Serializable {
     private String cargo;
 
     public Empleados(String nombre, String apellido, String cargo) {
@@ -16,4 +18,5 @@ public class Empleados extends Persona {
         return "Empleado: " + nombre + " " + apellido + " - Cargo: " + cargo;
     }
 }
+
 
