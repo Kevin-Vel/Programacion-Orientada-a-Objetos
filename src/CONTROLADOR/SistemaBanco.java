@@ -2,6 +2,7 @@ package CONTROLADOR;
 
 import MODELO.Cliente;
 import MODELO.Cuenta;
+import MODELO.Empleados;
 import MODELO.TipoCuenta;
 
 import java.io.*;
@@ -12,12 +13,23 @@ public class SistemaBanco {
     private Ordenamiento ordenamiento;
     private static final String ARCHIVO_CLIENTES = "clientes.dat";
     private static final String ARCHIVO_CUENTAS = "cuentas.dat";
+    private static final String ARCHIVO_EMPLEADOS = "empleados.dat";
     private List<Cuenta> cuentas;
+    private List<Empleados> empleados;
+    private List<Cliente> clientes;
 
     public SistemaBanco() {
         this.ordenamiento = new Ordenamiento();
         this.cuentas = new ArrayList<>();
+        this.empleados = new ArrayList<>();
         cargarDatos(); // Cargar datos al inicializar
+    }
+
+    //CARGAR DATOS
+    private void cargarDatos() {
+        cuentas = cargarLista(ARCHIVO_CUENTAS);
+        empleados = cargarLista(ARCHIVO_EMPLEADOS);
+        clientes = cargarLista(ARCHIVO_CLIENTES);
     }
 
     public Cliente crearCliente(int idclie, int dni, String nom, String apell, String contraseña) {
@@ -79,33 +91,6 @@ public class SistemaBanco {
         return new ArrayList<>(cuentas); // Devolver copia
     }
 
-    // Métodos para persistencia de datos
-    @SuppressWarnings("unchecked")
-    private void cargarDatos() {
-        // Cargar clientes
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARCHIVO_CLIENTES))) {
-            List<Cliente> clientesCargados = (List<Cliente>) ois.readObject();
-            for (Cliente cliente : clientesCargados) {
-                ordenamiento.Implementacion(cliente);
-            }
-            System.out.println("Clientes cargados: " + clientesCargados.size());
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo de clientes no encontrado. Se creará uno nuevo.");
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error al cargar clientes: " + e.getMessage());
-        }
-
-        // Cargar cuentas
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARCHIVO_CUENTAS))) {
-            cuentas = (List<Cuenta>) ois.readObject();
-            System.out.println("Cuentas cargadas: " + cuentas.size());
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo de cuentas no encontrado. Se creará uno nuevo.");
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error al cargar cuentas: " + e.getMessage());
-        }
-    }
-
     //Guardar Transacciones (HISTORIAL)
     public void registrarTransaccion(String descripcion) {
         try (FileWriter fw = new FileWriter("transacciones.txt", true)) {
@@ -132,4 +117,21 @@ public class SistemaBanco {
         } catch (IOException e) {
             System.err.println("Error al guardar cuentas: " + e.getMessage());
         }
-    }}
+    }
+
+    //Mejora de cargarDatos
+    @SuppressWarnings("unchecked")
+    private <T> List<T> cargarLista(String archivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+            return (List<T>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo no encontrado: " + archivo);
+            return new ArrayList<>();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+}
+
+
