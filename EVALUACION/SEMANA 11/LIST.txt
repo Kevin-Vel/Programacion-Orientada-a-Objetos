@@ -1,0 +1,4 @@
+-Las listas en java
+Son colecciones de datos de cualquier tipo ordenadas,
+donde podemos agregar, remover o consultar los datos
+almacenados la mas conocida es la ArrayList.
