@@ -6,7 +6,8 @@ almacenados la mas conocida es la ArrayList.
 APLICACION QUE USAN LIST
 WhatsApp
 Telegram
-oh aplicaciones de mensajeria
+oh aplicaciones de mensajeria o de busqueda
 YouTube
+
 
 
