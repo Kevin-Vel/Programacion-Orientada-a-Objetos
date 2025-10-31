@@ -1,0 +1,8 @@
+Son clases donde pacepta cualquier tipo de Dato
+esto permite la reutiliozacion de codigo y el
+ahorro de recursos en el sistema, tambien se le
+puede definir una variable?
+
+APLICACIONES
+- Gpa map
+- Listas
