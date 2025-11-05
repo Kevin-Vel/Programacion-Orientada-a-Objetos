@@ -1,12 +1,10 @@
 package MODELO;
 
-import java.io.Serializable;
-
-public class Empleados extends Persona implements Serializable {
+public class Empleados extends Persona {
     private String cargo;
 
-    public Empleados(String nombre, String apellido, String cargo) {
-        super(nombre, apellido);
+    public Empleados(String nombre, String apellido, String dni, String password, String cargo) {
+        super(nombre, apellido, dni, password);
         this.cargo = cargo;
     }
 
