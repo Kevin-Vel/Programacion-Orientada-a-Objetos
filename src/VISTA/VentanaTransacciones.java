@@ -52,18 +52,18 @@ public class VentanaTransacciones extends JFrame {
 
                 Cliente destinatario = sistema.buscarClientePorDni(dniDestino);
                 if (destinatario == null) {
-                    JOptionPane.showMessageDialog(this, "❌ Cliente no encontrado.");
+                    JOptionPane.showMessageDialog(this, "Cliente no encontrado.");
                     return;
                 }
 
                 double monto = Double.parseDouble(txtMonto.getText());
                 if (monto <= 0) {
-                    JOptionPane.showMessageDialog(this, "⚠️ El monto debe ser mayor que cero.");
+                    JOptionPane.showMessageDialog(this, "⚠El monto debe ser mayor que cero.");
                     return;
                 }
 
                 if (cliente.getCuenta().getSaldo() < monto) {
-                    JOptionPane.showMessageDialog(this, "💸 Saldo insuficiente.");
+                    JOptionPane.showMessageDialog(this, " Saldo insuficiente.");
                     return;
                 }
 
@@ -91,7 +91,7 @@ public class VentanaTransacciones extends JFrame {
                 );
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "⚠️ Ingrese valores válidos.");
+                JOptionPane.showMessageDialog(this, " Ingrese valores válidos.");
             }
         });
 

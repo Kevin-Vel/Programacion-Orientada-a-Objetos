@@ -6,7 +6,6 @@ import MODELO.Empleados;
 import MODELO.TipoCuenta;
 
 import java.io.*;
-import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class SistemaBanco {
         return cliente;
     }
 
-    public Cliente buscarClientePorDni(String dni) {
+    public Cliente buscarClientePorDni(int dni) {
         for (Cliente c : ordenamiento.getListaCliente()) {
             if (c.getDni().equals(dni)) {
                 return c;

@@ -59,11 +59,9 @@ public class VentanaCliente extends JFrame {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         btnCrear = new JButton("Crear Cliente");
-        btnVerClientes = new JButton("Ver Clientes");
         btnVolver = new JButton("Regresar");
 
         panelBotones.add(btnCrear);
-        panelBotones.add(btnVerClientes);
         panelBotones.add(btnVolver);
 
         panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
@@ -108,12 +106,6 @@ public class VentanaCliente extends JFrame {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "DNI inválido");
             }
-        });
-
-        btnVerClientes.addActionListener(e -> {
-            sistema.getOrdenamiento().setCriterioOrdenamiento("dni"); // o "nombre", "apellido"
-            String lista = sistema.getOrdenamiento().listaFormateada();
-            JOptionPane.showMessageDialog(null, lista);
         });
 
         btnVolver.addActionListener(e -> {

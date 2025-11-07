@@ -1,6 +1,7 @@
 package VISTA;
 
 import MODELO.Empleados;
+import CONTROLADOR.SistemaBanco;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +11,11 @@ import java.awt.event.ActionListener;
 public class VentanaEmpleado extends JFrame {
 
     private Empleados empleado;
+    private SistemaBanco sistema;
 
-    public VentanaEmpleado(Empleados empleado) {
+    public VentanaEmpleado(SistemaBanco sistema, Empleados empleado) {
         this.empleado = empleado;
+        this.sistema = sistema;
 
         setTitle("Panel del Empleado - " + empleado.getNombre());
         setSize(500, 350);

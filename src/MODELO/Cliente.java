@@ -10,7 +10,7 @@ public class Cliente extends Persona implements Autenticable, Serializable {
     private Cuenta cuenta;
 
     // Constructor que espera exactamente (int idclie, int dni, String nom, String apell, String contraseña)
-    public Cliente(int idCliente, int dni, String nombre, String apellido, String password) {
+    public Cliente(int idCliente, String dni, String nombre, String apellido, String password) {
         super(nombre, apellido, String.valueOf(dni), password); // Persona guarda dni como String
         this.idCliente = idCliente;
         this.cuenta = new Cuenta(); // cuenta por defecto (saldo 0)
