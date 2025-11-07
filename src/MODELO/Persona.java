@@ -7,10 +7,10 @@ public abstract class Persona implements PersonaInterface, Serializable {
 
     protected String nombre;
     protected String apellido;
-    protected String dni;
-    protected String password;
+    protected String dni;        // ahora dni como String
+    protected String password;   // password como String
 
-    public Persona(String nombre, String apellido, String dni, String password) {
+    public Persona(String nombre, String apellido, String dni, String password){
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -25,7 +25,6 @@ public abstract class Persona implements PersonaInterface, Serializable {
     public String getApellido() { return apellido; }
     public void setApellido(String apellido) { this.apellido = apellido; }
 
-    // 🔹 Getters y setters nuevos
     public String getDni() { return dni; }
     public void setDni(String dni) { this.dni = dni; }
 
@@ -34,6 +33,7 @@ public abstract class Persona implements PersonaInterface, Serializable {
 
     public abstract String mostrarInfo();
 }
+
 
 
 

@@ -6,6 +6,7 @@ import MODELO.Empleados;
 import MODELO.TipoCuenta;
 
 import java.io.*;
+import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +41,9 @@ public class SistemaBanco {
         return cliente;
     }
 
-    public Cliente buscarClientePorDni(int dni) {
+    public Cliente buscarClientePorDni(String dni) {
         for (Cliente c : ordenamiento.getListaCliente()) {
-            if (c.getDni() == dni) {
+            if (c.getDni().equals(dni)) {
                 return c;
             }
         }
@@ -74,14 +75,24 @@ public class SistemaBanco {
         return dni;
     }
 
-    public Cliente buscarPorDni(int dni) {
+    public Cliente buscarPorDni(String dni) {
         for (Cliente c : ordenamiento.getListaCliente()) {
-            if (c.getDni() == dni) {
+            if (c.getDni().equals(dni)) {
                 return c;
             }
         }
         return null;
     }
+
+    public Empleados buscarEmpleadoPorCodigo(String dni) {
+        for (Empleados e : empleados) { // empleados es tu lista ya cargada
+            if (e.getDni().equalsIgnoreCase(dni)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
 
     public Ordenamiento getOrdenamiento() {
         return ordenamiento;
