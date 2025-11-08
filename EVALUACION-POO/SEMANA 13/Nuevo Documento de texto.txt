@@ -1,0 +1,9 @@
+Expresiones Lambda
+Son funciones anonimas que se
+usan para argumentar metodos o
+asignar variables, se utilizan en 
+interfazes funcionales que solo tiene
+un metodo abtracto o en listas donde 
+se puede filtrar, mapear o reducir los
+valores de la lista.
+
