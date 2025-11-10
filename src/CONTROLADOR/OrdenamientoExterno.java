@@ -116,16 +116,41 @@ public class OrdenamientoExterno {
         }
     }
 
-    // Comparadores específicos para clientes (opcionales, se pueden pasar desde fuera)
+    // Comparadores específicos para clientes
     public static Comparator<String> comparadorPorDNI() {
         return (linea1, linea2) -> {
             String[] partes1 = linea1.split(",");
             String[] partes2 = linea2.split(",");
-            int dni1 = Integer.parseInt(partes1[1]); // DNI está en la posición 1
-            int dni2 = Integer.parseInt(partes2[1]);
-            return Integer.compare(dni1, dni2);
+
+            String dni1Str = partes1[1];
+            String dni2Str = partes2[1];
+
+            Integer dni1Num = null;
+            Integer dni2Num = null;
+
+            // 🔹 Intentamos convertir a número
+            try {
+                dni1Num = Integer.parseInt(dni1Str);
+            } catch (NumberFormatException ignored) {}
+
+            try {
+                dni2Num = Integer.parseInt(dni2Str);
+            } catch (NumberFormatException ignored) {}
+
+            // Si son solo numeros
+            if (dni1Num != null && dni2Num != null) {
+                return Integer.compare(dni1Num, dni2Num);
+            }
+
+            // Si uno es numero
+            if (dni1Num != null && dni2Num == null) return -1;
+            if (dni1Num == null && dni2Num != null) return 1;
+
+            // Ambos NO son números → comparar como cadenas
+            return dni1Str.compareToIgnoreCase(dni2Str);
         };
     }
+
 
     public static Comparator<String> comparadorPorNombre() {
         return (linea1, linea2) -> {
