@@ -3,3 +3,8 @@ Son moldes de programacion
 para hacer programas o sistemas
 que mayormente se utilizan en todo
 el tiempo se dividen en 3:
+
+-Patrones de Creacion
+-Patrones de Estructura
+-Patrones de comportamiento
+
