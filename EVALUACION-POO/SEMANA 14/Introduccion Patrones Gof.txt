@@ -5,6 +5,26 @@ que mayormente se utilizan en todo
 el tiempo se dividen en 3:
 
 -Patrones de Creacion
+  Singleton
+  Factory Method
+  Abstrac Factory
+  
 -Patrones de Estructura
+  Adapter
+  Decorator
+  Composite
+  Proxy
+  Bridge
+  Flyweight
+
 -Patrones de comportamiento
+  Observer
+  Strategy
+  Command
+  State
+  Chain of responsability
+  Interpreter
+  Visitor
+  
+
 
