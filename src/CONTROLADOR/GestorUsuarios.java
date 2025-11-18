@@ -1,6 +1,6 @@
-package CONTROLADOR;
-
 import MODELO.Persona;
+import MODELO.Cliente;
+import MODELO.Empleados;
 import java.util.List;
 
 public class GestorUsuarios<T extends Persona> {
@@ -11,13 +11,31 @@ public class GestorUsuarios<T extends Persona> {
         this.listaUsuarios = listaUsuarios;
     }
 
-    public T verificarAcceso(String dni, String password) {
+    public T verificarAcceso(String dniIngresado, String passwordIngresado) {
+
         for (T usuario : listaUsuarios) {
-            if (usuario.getDni().equalsIgnoreCase(dni)
-                    && usuario.getPassword().equals(password)) {
-                return usuario;
+
+            String dniReal = null;
+
+            // ====== Si es Cliente ======
+            if (usuario instanceof Cliente) {
+                dniReal = ((Cliente) usuario).getDni(); // Cliente usa DNI normal
+            }
+
+            // ====== Si es Empleado ======
+            if (usuario instanceof Empleados) {
+                dniReal = ((Empleados) usuario).geteDni(); // Empleado usa eDni
+            }
+
+            // Verificamos que exista DNI
+            if (dniReal != null &&
+                    dniReal.equalsIgnoreCase(dniIngresado) &&
+                    usuario.getPassword().equals(passwordIngresado)) {
+
+                return usuario;   // acceso válido
             }
         }
-        return null;
+
+        return null; // no coincide nadie
     }
 }

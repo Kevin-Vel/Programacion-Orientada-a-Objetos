@@ -24,8 +24,7 @@ public class SistemaBanco {
         this.ordenamiento = new Ordenamiento();
         this.cuentas = new ArrayList<>();
         this.empleados = new ArrayList<>();
-
-        cargarDatos(); // carga completa del sistema
+        cargarDatos();
     }
 
     // ===========================
@@ -65,21 +64,23 @@ public class SistemaBanco {
         return cliente;
     }
 
-    public Cliente buscarClientePorDni(int dni) {
+    public Cliente buscarClientePorDni(String dniBuscado) {
         for (Cliente c : ordenamiento.getListaCliente()) {
-            if (c.getDni().equals(dni)) {
+            if (c.getDni().equals(dniBuscado)) {
                 return c;
             }
         }
         return null;
     }
 
+
+
     // ===========================
     //        GESTIÓN EMPLEADOS
     // ===========================
-    public Empleados buscarEmpleadoPorCodigo(String dni) {
+    public Empleados buscarEmpleadoPorCodigo(String codigo) {
         for (Empleados e : empleados) {
-            if (e.getDni().equalsIgnoreCase(dni)) {
+            if (e.getDni().equalsIgnoreCase(codigo)) {  // su “dni” en realidad es código
                 return e;
             }
         }

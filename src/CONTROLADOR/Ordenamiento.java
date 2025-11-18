@@ -7,17 +7,21 @@ import java.io.*;
 import java.util.*;
 
 public class Ordenamiento<T extends Persona> {
-    private Comparator<T> comparador;
-    private List<Cliente> listaCliente = new ArrayList<>();
+
+    private final List<Cliente> listaCliente = new ArrayList<>();
     private static final int UMBRAL_ORDENAMIENTO_EXTERNO = 10000;
 
-    // 🔹 Inserta un nuevo cliente manteniendo orden alfabético por nombre
+    // =====================================================
+    // 🔹 Inserta de forma ordenada por nombre (optimizado)
+    // =====================================================
     public void Implementacion(Cliente nuevoCliente) {
-        int i = 0;
-        while (i < listaCliente.size() &&
-                listaCliente.get(i).getNombre().compareToIgnoreCase(nuevoCliente.getNombre()) < 0) {
-            i++;
-        }
+        int i = Collections.binarySearch(
+                listaCliente,
+                nuevoCliente,
+                Comparator.comparing(Cliente::getNombre, String.CASE_INSENSITIVE_ORDER)
+        );
+
+        if (i < 0) i = -(i + 1);
         listaCliente.add(i, nuevoCliente);
     }
 
@@ -25,40 +29,45 @@ public class Ordenamiento<T extends Persona> {
         return listaCliente;
     }
 
-    // 🔹 Método con expresión lambda mejorada para permitir DNI String
-    public void ordenarPor(String criterio) {
-        Comparator<Cliente> comparador;
+    // =====================================================
+    // 🔹 Comparadores en un solo método (óptimo)
+    // =====================================================
+    private Comparator<Cliente> getComparador(String criterio) {
 
         switch (criterio.toLowerCase()) {
+
             case "dni":
-                // ✅ Intenta ordenar numéricamente si se puede, si no, alfabéticamente
-                comparador = Comparator.comparingInt(c -> {
+                // Ordena DNI numérico si se puede, si no alfabético
+                return Comparator.comparing(c -> {
+                    String dni = c.getDni();
                     try {
-                        return Integer.parseInt(c.getDni());
+                        return Integer.parseInt(dni);
                     } catch (NumberFormatException e) {
-                        return Integer.MAX_VALUE; // Si no es número, lo manda al final
+                        return Integer.MAX_VALUE; // manda al final
                     }
                 });
-                break;
 
             case "apellido":
-                comparador = Comparator.comparing(Cliente::getApellido, String.CASE_INSENSITIVE_ORDER);
-                break;
+                return Comparator.comparing(Cliente::getApellido, String.CASE_INSENSITIVE_ORDER);
 
             case "nombre":
             default:
-                comparador = Comparator.comparing(Cliente::getNombre, String.CASE_INSENSITIVE_ORDER);
-                break;
+                return Comparator.comparing(Cliente::getNombre, String.CASE_INSENSITIVE_ORDER);
         }
-
-        listaCliente.sort(comparador);
     }
 
-    // 🔹 Devuelve una cadena con los clientes ordenados según el criterio
+    // =====================================================
+    // 🔹 Ordenar lista interna (rápido)
+    // =====================================================
+    public void ordenarPor(String criterio) {
+        listaCliente.sort(getComparador(criterio));
+    }
+
+    // =====================================================
+    // 🔹 Devolver lista ordenada (memoria o archivo)
+    // =====================================================
     public String listaFormateada(String criterio) {
-        if (listaCliente.isEmpty()) {
-            return "No hay clientes registrados.";
-        }
+        if (listaCliente.isEmpty()) return "No hay clientes registrados.";
 
         if (listaCliente.size() <= UMBRAL_ORDENAMIENTO_EXTERNO) {
             ordenarPor(criterio);
@@ -72,108 +81,110 @@ public class Ordenamiento<T extends Persona> {
         }
     }
 
-    // 🔹 Mostrar lista directamente desde memoria
+    // =====================================================
+    // 🔹 Formateo simple desde memoria
+    // =====================================================
     private String formatearListaMemoria() {
         StringBuilder sb = new StringBuilder();
         for (Cliente c : listaCliente) {
-            sb.append(c.toString()).append("\n");
+            sb.append(c).append("\n");
         }
         return sb.toString();
     }
 
-    // 🔹 Si la lista es grande, usar la otra clase OrdenamientoExterno
+    // =====================================================
+    // 🔹 Ordenamiento externo (optimizado)
+    // =====================================================
     private String formatearListaOrdenamientoExterno(String criterio) throws IOException {
-        File archivoEntrada = File.createTempFile("clientes_", ".txt");
-        File archivoSalida = File.createTempFile("clientes_ordenados_", ".txt");
-        archivoEntrada.deleteOnExit();
-        archivoSalida.deleteOnExit();
 
-        guardarEnArchivo(archivoEntrada.getAbsolutePath());
+        File in = File.createTempFile("clientes_", ".txt");
+        File out = File.createTempFile("clientes_ordenados_", ".txt");
 
-        Comparator<String> comparador;
+        in.deleteOnExit();
+        out.deleteOnExit();
+
+        guardarEnArchivo(in.getAbsolutePath());
+
+        Comparator<String> compString;
         switch (criterio.toLowerCase()) {
-            case "dni":
-                comparador = OrdenamientoExterno.comparadorPorDNI();
-                break;
-            case "apellido":
-                comparador = OrdenamientoExterno.comparadorPorApellido();
-                break;
-            default:
-                comparador = OrdenamientoExterno.comparadorPorNombre();
+            case "dni": compString = OrdenamientoExterno.comparadorPorDNI(); break;
+            case "apellido": compString = OrdenamientoExterno.comparadorPorApellido(); break;
+            default: compString = OrdenamientoExterno.comparadorPorNombre(); break;
         }
 
         OrdenamientoExterno.ordenarArchivoGrande(
-                archivoEntrada.getAbsolutePath(),
-                archivoSalida.getAbsolutePath(),
-                comparador
+                in.getAbsolutePath(),
+                out.getAbsolutePath(),
+                compString
         );
 
-        String resultado = leerYFormatearArchivo(archivoSalida);
-        archivoEntrada.delete();
-        archivoSalida.delete();
+        String resultado = leerYFormatearArchivo(out);
 
         return resultado;
     }
 
-    // 🔹 Guardar en archivo CSV
-    public void guardarEnArchivo(String nombreArchivo) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(nombreArchivo))) {
-            for (Cliente cliente : listaCliente) {
-                writer.println(clienteToCSV(cliente));
+    // =====================================================
+    // 🔹 Guardar CSV
+    // =====================================================
+    public void guardarEnArchivo(String ruta) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ruta))) {
+            for (Cliente c : listaCliente) {
+                pw.println(clienteToCSV(c));
             }
         }
     }
 
-    // 🔹 Cargar desde archivo CSV
-    public void cargarDesdeArchivo(String nombreArchivo) throws IOException {
+    // =====================================================
+    // 🔹 Cargar CSV
+    // =====================================================
+    public void cargarDesdeArchivo(String ruta) throws IOException {
         listaCliente.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nombreArchivo))) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                Cliente cliente = csvToCliente(linea);
-                if (cliente != null) listaCliente.add(cliente);
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Cliente c = csvToCliente(line);
+                if (c != null) listaCliente.add(c);
             }
         }
     }
 
+    // =====================================================
     // 🔹 Conversión Cliente ↔ CSV
-    private String clienteToCSV(Cliente cliente) {
-        return cliente.getIdCliente() + "," +
-                cliente.getDni() + "," +
-                cliente.getNombre() + "," +
-                cliente.getApellido() + "," +
-                cliente.getPassword();
+    // =====================================================
+    private String clienteToCSV(Cliente c) {
+        return c.getIdCliente() + "," + c.getDni() + "," +
+                c.getNombre() + "," + c.getApellido() + "," +
+                c.getPassword();
     }
 
-    private Cliente csvToCliente(String csvLine) {
+    private Cliente csvToCliente(String line) {
         try {
-            String[] partes = csvLine.split(",");
-            if (partes.length == 5) {
-                int id = Integer.parseInt(partes[0]);
-                String dni = partes[1];
-                String nombre = partes[2];
-                String apellido = partes[3];
-                String contraseña = partes[4];
-                Cliente cliente = new Cliente(id, dni, nombre, apellido, contraseña);
-                cliente.setPassword(contraseña);
-                return cliente;
-            }
+            String[] p = line.split(",");
+            if (p.length != 5) return null;
+
+            return new Cliente(
+                    Integer.parseInt(p[0]),
+                    p[1], p[2], p[3], p[4]
+            );
+
         } catch (Exception e) {
-            System.err.println("Error al parsear línea: " + csvLine);
+            System.err.println("Error al parsear CSV: " + line);
+            return null;
         }
-        return null;
     }
 
-    private String leerYFormatearArchivo(File archivo) throws IOException {
+    // =====================================================
+    // 🔹 Leer archivo ya ordenado
+    // =====================================================
+    private String leerYFormatearArchivo(File f) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                Cliente cliente = csvToCliente(linea);
-                if (cliente != null) sb.append(cliente.toString()).append("\n");
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Cliente c = csvToCliente(line);
+                if (c != null) sb.append(c).append("\n");
             }
         }
         return sb.toString();
     }
 }
-
