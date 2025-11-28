@@ -1,0 +1,4 @@
+son clases q por asi
+como que crean un objeto pero
+en la memoria externa ya no 
+interna
