@@ -8,4 +8,4 @@ con equals() hasta hallar la coincidencia. Si la encuentra, devuelve
 la contraseña asociada. Este método permite acceder y verificar datos
 de forma muy rápida, en tiempo promedio constante O(1).
 
-Nuevo Sistema de Evaluacion
+Nuevo Sistema de Evaluacion, eeor en una clase mejora del sistema
