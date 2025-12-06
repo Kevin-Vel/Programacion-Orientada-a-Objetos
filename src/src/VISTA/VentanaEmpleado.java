@@ -63,7 +63,7 @@ public class VentanaEmpleado extends JFrame {
         // 🔹 Eventos de botones
         btnVerClientes.addActionListener(e -> {
             // Ahora puede usar 'sistema' porque está asignado
-            String lista = this.sistema.getOrdenamiento().listaFormateada("nombre");
+            String lista = this.sistema.getOrdenamiento().listaFormateadaOrdenada("nombre");
             JOptionPane.showMessageDialog(this, lista, "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
         });
 

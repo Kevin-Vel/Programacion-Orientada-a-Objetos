@@ -1,189 +1,206 @@
 package CONTROLADOR;
 
+import MODELO.Persona;
 import MODELO.Cliente;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-public class Ordenamiento {
+public class Ordenamiento<T extends Persona> {
 
-    private final List<Cliente> listaCliente = new ArrayList<>();
-    private String criterioPorDefecto = "nombre";
+    private final List<T> lista = new ArrayList<>();
     private static final int UMBRAL_ORDENAMIENTO_EXTERNO = 10000;
+    private boolean usarOrdenamientoExterno = false; // 🔹 CONTROL
 
     // =====================================================
-    // 🔹 Inserción ordenada por nombre
+    // 🔹 CONSTRUCTOR Y CONFIGURACIÓN
     // =====================================================
-    public void agregarOrdenado(Cliente nuevoCliente) {
-        int i = Collections.binarySearch(
-                listaCliente,
-                nuevoCliente,
-                Comparator.comparing(Cliente::getNombre, String.CASE_INSENSITIVE_ORDER)
-        );
-
-        if (i < 0) i = -(i + 1);
-        listaCliente.add(i, nuevoCliente);
+    public Ordenamiento() {
+        this.usarOrdenamientoExterno = false; // Por defecto: NO usar ordenamiento externo
     }
 
-    public List<Cliente> getListaCliente() {
-        return listaCliente;
+    public void activarOrdenamientoExterno(boolean activar) {
+        this.usarOrdenamientoExterno = activar;
     }
 
     // =====================================================
-    // 🔹 Comparadores corregidos
+    // 🔹 MÉTODOS BÁSICOS
     // =====================================================
-    private Comparator<Cliente> getComparador(String criterio) {
+    public void agregar(T persona) {
+        lista.add(persona);
+    }
 
-        switch (criterio.toLowerCase()) {
-
-            case "dni":
-                return Comparator.comparingInt(Cliente::getDni);
-
-            case "apellido":
-                return Comparator.comparing(Cliente::getApellido, String.CASE_INSENSITIVE_ORDER);
-
-            case "nombre":
-            default:
-                return Comparator.comparing(Cliente::getNombre, String.CASE_INSENSITIVE_ORDER);
-        }
+    public List<T> getLista() {
+        return new ArrayList<>(lista);
     }
 
     // =====================================================
-    // 🔹 Ordenar lista interna
+    // 🔹 ORDENAMIENTO EN MEMORIA (simple)
     // =====================================================
-    public void ordenarPor(String criterio) {
-        listaCliente.sort(getComparador(criterio));
+    public void ordenarPorNombre() {
+        lista.sort(Comparator.comparing(Persona::getNombre, String.CASE_INSENSITIVE_ORDER));
     }
 
+    public void ordenarPorApellido() {
+        lista.sort(Comparator.comparing(Persona::getApellido, String.CASE_INSENSITIVE_ORDER));
+    }
+
+    public void ordenarPor(Comparator<T> comparador) {
+        lista.sort(comparador);
+    }
 
     // =====================================================
-    // 🔹 Lista formateada
+    // 🔹 MÉTODO PRINCIPAL QUE DECIDE QUÉ USAR
     // =====================================================
-    public String listaFormateada(String criterio) {
-        if (listaCliente.isEmpty()) return "No hay clientes registrados.";
+    public String listaFormateadaOrdenada(String criterio) {
+        if (lista.isEmpty()) return "No hay registros.";
 
-        if (listaCliente.size() <= UMBRAL_ORDENAMIENTO_EXTERNO) {
-            ordenarPor(criterio);
-            return formatearListaMemoria();
+        // 🔹 DECISIÓN: ¿Usar ordenamiento externo?
+        boolean debeUsarExterno = usarOrdenamientoExterno &&
+                lista.size() > UMBRAL_ORDENAMIENTO_EXTERNO;
+
+        if (!debeUsarExterno) {
+            // 🔹 ORDENAMIENTO SIMPLE EN MEMORIA
+            return ordenarEnMemoriaYFormatear(criterio);
         } else {
+            // 🔹 ORDENAMIENTO EXTERNO (solo si está activado y es necesario)
             try {
-                return formatearListaOrdenamientoExterno(criterio);
+                return ordenarConExterno(criterio);
             } catch (IOException e) {
-                return "Error al ordenar: " + e.getMessage();
+                return "Error en ordenamiento externo: " + e.getMessage();
             }
         }
     }
 
     // =====================================================
-    // Formateo en memoria
+    // 🔹 ORDENAMIENTO SIMPLE EN MEMORIA
     // =====================================================
-    private String formatearListaMemoria() {
+    private String ordenarEnMemoriaYFormatear(String criterio) {
+        switch (criterio.toLowerCase()) {
+            case "apellido":
+                ordenarPorApellido();
+                break;
+            case "nombre":
+            default:
+                ordenarPorNombre();
+                break;
+        }
+
         StringBuilder sb = new StringBuilder();
-        for (Cliente c : listaCliente) sb.append(c).append("\n");
+        lista.forEach(p -> sb.append(p.mostrarInfo()).append("\n"));
         return sb.toString();
     }
 
     // =====================================================
-    // Ordenamiento externo
+    // 🔹 ORDENAMIENTO EXTERNO (solo para Clientes)
     // =====================================================
-    private String formatearListaOrdenamientoExterno(String criterio) throws IOException {
-
-        File in = File.createTempFile("clientes_", ".txt");
-        File out = File.createTempFile("clientes_ordenados_", ".txt");
-
-        in.deleteOnExit();
-        out.deleteOnExit();
-
-        guardarEnArchivo(in.getAbsolutePath());
-
-        // ⚠ ESTE MÉTODO LO TIENES QUE TENER EN TU CLASE OrdenamientoExterno
-        Comparator<String> compString;
-        switch (criterio.toLowerCase()) {
-            case "dni": compString = OrdenamientoExterno.comparadorPorDNI(); break;
-            case "apellido": compString = OrdenamientoExterno.comparadorPorApellido(); break;
-            default: compString = OrdenamientoExterno.comparadorPorNombre(); break;
+    private String ordenarConExterno(String criterio) throws IOException {
+        // Verificar que sea lista de Clientes
+        if (lista.isEmpty() || !(lista.get(0) instanceof Cliente)) {
+            return "Ordenamiento externo solo disponible para Clientes";
         }
 
+        File archivoTemp = File.createTempFile("clientes_", ".txt");
+        archivoTemp.deleteOnExit();
+
+        File archivoOrdenado = File.createTempFile("clientes_ordenados_", ".txt");
+        archivoOrdenado.deleteOnExit();
+
+        // Guardar clientes en archivo temporal
+        try (PrintWriter pw = new PrintWriter(new FileWriter(archivoTemp))) {
+            for (T persona : lista) {
+                if (persona instanceof Cliente) {
+                    Cliente c = (Cliente) persona;
+                    pw.println(c.getIdCliente() + "," + c.getDni() + "," +
+                            c.getNombre() + "," + c.getApellido() + "," +
+                            c.getPassword());
+                }
+            }
+        }
+
+        // Determinar comparador
+        Comparator<String> comparador;
+        switch (criterio.toLowerCase()) {
+            case "dni":
+                comparador = OrdenamientoExterno.comparadorPorDNI();
+                break;
+            case "apellido":
+                comparador = OrdenamientoExterno.comparadorPorApellido();
+                break;
+            case "nombre":
+            default:
+                comparador = OrdenamientoExterno.comparadorPorNombre();
+                break;
+        }
+
+        // Llamar a OrdenamientoExterno
         OrdenamientoExterno.ordenarArchivoGrande(
-                in.getAbsolutePath(),
-                out.getAbsolutePath(),
-                compString
+                archivoTemp.getAbsolutePath(),
+                archivoOrdenado.getAbsolutePath(),
+                comparador
         );
 
-        return leerYFormatearArchivo(out);
+        // Leer y formatear resultado
+        return leerArchivoOrdenado(archivoOrdenado);
+    }
+
+    private String leerArchivoOrdenado(File archivo) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",");
+                if (partes.length >= 5) {
+                    sb.append("ID: ").append(partes[0])
+                            .append(", DNI: ").append(partes[1])
+                            .append(", Nombre: ").append(partes[2])
+                            .append(" ").append(partes[3])
+                            .append("\n");
+                }
+            }
+        }
+        return sb.toString();
     }
 
     // =====================================================
-    // Guardar CSV
+    // 🔹 LAMBDAS Y STREAMS (Unidad 3)
     // =====================================================
-    public void guardarEnArchivo(String ruta) throws IOException {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(ruta))) {
-            for (Cliente c : listaCliente) {
-                pw.println(clienteToCSV(c));
+    public List<T> filtrar(Predicate<T> condicion) {
+        return lista.stream()
+                .filter(condicion)
+                .collect(Collectors.toList());
+    }
+
+    public long contar(Predicate<T> condicion) {
+        return lista.stream()
+                .filter(condicion)
+                .count();
+    }
+
+    public List<String> getNombresUnicos() {
+        return lista.stream()
+                .map(Persona::getNombre)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    // =====================================================
+    // 🔹 MÉTODOS DE COMPATIBILIDAD
+    // =====================================================
+    @SuppressWarnings("unchecked")
+    public List<Cliente> getListaCliente() {
+        List<Cliente> clientes = new ArrayList<>();
+        for (T persona : lista) {
+            if (persona instanceof Cliente) {
+                clientes.add((Cliente) persona);
             }
         }
+        return clientes;
     }
 
     public void Implementacion(Cliente c) {
-        agregarOrdenado(c);
-    }
-
-    // =====================================================
-    // Cargar CSV
-    // =====================================================
-    public void cargarDesdeArchivo(String ruta) throws IOException {
-        listaCliente.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                Cliente c = csvToCliente(line);
-                if (c != null) listaCliente.add(c);
-            }
-        }
-    }
-
-    // =====================================================
-    // Conversión a CSV corregida
-    // =====================================================
-    private String clienteToCSV(Cliente c) {
-        return c.getIdCliente() + "," +
-                c.getDni() + "," +
-                c.getNombre() + "," +
-                c.getApellido();
-    }
-
-    private Cliente csvToCliente(String line) {
-        try {
-            String[] p = line.split(",");
-            if (p.length != 5) return null;
-
-            return new Cliente(
-                    Integer.parseInt(p[0]), // idCliente
-                    Integer.parseInt(p[1]), // dni
-                    p[2],                   // nombre
-                    p[3],                   // apellido
-                    p[4]                    // password
-            );
-
-        } catch (Exception e) {
-            System.err.println("Error al parsear CSV: " + line);
-            return null;
-        }
-    }
-
-
-    // =====================================================
-    // 🔹 Leer archivo ordenado
-    // =====================================================
-    private String leerYFormatearArchivo(File f) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                Cliente c = csvToCliente(line);
-                if (c != null) sb.append(c).append("\n");
-            }
-        }
-        return sb.toString();
+        agregar((T) c);
     }
 }

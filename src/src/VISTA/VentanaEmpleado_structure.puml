@@ -1,0 +1,294 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "VISTA.VentanaEmpleado",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_2015469978 { 
+   	label=MODELO
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   Cliente2015469978[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Cliente</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cuenta: Cuenta [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dni: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   idCliente: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ autenticar(usuario: String, contraseña: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ mostrarInfo(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Cuenta2015469978[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Cuenta</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cliente: Cliente [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   numCuenta: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   saldo: double [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tipCuenta: TipoCuenta [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ depositar(monto: double)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ retirar(monto: double)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Empleados2015469978[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Empleados</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cargo: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eDni: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ autenticar(usuario: String, contraseña: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ mostrarInfo(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Persona2015469978[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Persona</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   apellido: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   nombre: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   password: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ mostrarInfo(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+subgraph cluster_438083587 { 
+   	label=CONTROLADOR
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   Ordenamiento438083587[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Ordenamiento</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   criterioPorDefecto: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   listaCliente: List&lt;Cliente&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ Implementacion(c: Cliente)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ agregarOrdenado(nuevoCliente: Cliente)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ cargarDesdeArchivo(ruta: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >- clienteToCSV(c: Cliente): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- csvToCliente(line: String): Cliente</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatearListaMemoria(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatearListaOrdenamientoExterno(criterio: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- getComparador(criterio: String): Comparator&lt;Cliente&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ guardarEnArchivo(ruta: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >- leerYFormatearArchivo(f: File): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ listaFormateada(criterio: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ ordenarPor(criterio: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+OrdenamientoExterno438083587[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)OrdenamientoExterno</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- calcularMaxLineasMemoria(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ comparadorPorApellido(): Comparator&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ comparadorPorDNI(): Comparator&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ comparadorPorNombre(): Comparator&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- guardarChunkOrdenado(chunk: List&lt;String&gt;, indice: int): File</TD></TR>
+<TR><TD ALIGN="LEFT" >- mezclarArchivos(archivos: List&lt;File&gt;, archivoSalida: String, comparador: Comparator&lt;String&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ ordenarArchivoGrande(archivoEntrada: String, archivoSalida: String, comparador: Comparator&lt;String&gt;)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SistemaBanco438083587[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SistemaBanco</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cuentas: List&lt;Cuenta&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   empleados: List&lt;Empleados&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   ordenamiento: Ordenamiento [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ agregarCuenta(cuenta: Cuenta)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buscarClientePorDni(dniBuscado: int): Cliente</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buscarEmpleadoPorCodigo(codigo: String): Empleados</TD></TR>
+<TR><TD ALIGN="LEFT" >- cargarDatos()</TD></TR>
+<TR><TD ALIGN="LEFT" >- cargarLista(archivo: String): List&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ crearCliente(idclie: int, dni: int, nom: String, apell: String, contraseña: String): Cliente</TD></TR>
+<TR><TD ALIGN="LEFT" >+ crearCuenta(numCuent: int, tipoCuenta: TipoCuenta, saldo: double, cliente: Cliente): Cuenta</TD></TR>
+<TR><TD ALIGN="LEFT" >+ guardarDatos()</TD></TR>
+<TR><TD ALIGN="LEFT" >- guardarEmpleadoTxt(empleado: Empleados)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ iniciarSesion(identificador: String, password: String): Object</TD></TR>
+<TR><TD ALIGN="LEFT" >+ registrarEmpleado(e: Empleados)</TD></TR>
+<TR><TD ALIGN="LEFT" >- registrarEmpleadoAutomatico(codigo: String, password: String): Empleados</TD></TR>
+<TR><TD ALIGN="LEFT" >+ registrarTransaccion(descripcion: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+subgraph cluster_81679981 { 
+   	label=VISTA
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   ConsolaContraseñas81679981[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ConsolaContraseñas</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ cargarPasswords(): Map&lt;Integer, String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ guardarContraseña(dni: int, contraseña: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ mostrarTodasContraseñas(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verificarPassword(dni: int, password: String): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+VentanaEmpleado81679981[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)VentanaEmpleado</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   empleado: Empleados [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sistema: SistemaBanco [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
+'edges    
+Cuenta2015469978 -> Cliente2015469978[label="cliente
+[0..1]"];
+Empleados2015469978 -> Cliente2015469978[arrowhead=none];
+Ordenamiento438083587 -> Cliente2015469978[label="listaCliente
+[0..*]"];
+Persona2015469978 -> Empleados2015469978[arrowhead=none, arrowtail=empty, dir=both];
+SistemaBanco438083587 -> ConsolaContraseñas81679981[label="crearCliente() -> guardarContraseña()"];
+SistemaBanco438083587 -> Cuenta2015469978[label="cuentas
+[0..*]"];
+SistemaBanco438083587 -> Empleados2015469978[label="empleados
+[0..*]"];
+SistemaBanco438083587 -> Ordenamiento438083587[label="ordenamiento
+[0..1]"];
+VentanaEmpleado81679981 -> Empleados2015469978[label="empleado
+[0..1]"];
+VentanaEmpleado81679981 -> SistemaBanco438083587[label="sistema
+[0..1]"];
+    
+}
+@enduml

@@ -51,7 +51,7 @@ public class Menu extends JFrame {
 
         btnVerClientes.addActionListener(e -> {
             // ✔ Ahora se pasa criterio: nombre / apellido / dni
-            String lista = this.sistema.getOrdenamiento().listaFormateada("nombre");
+            String lista = this.sistema.getOrdenamiento().listaFormateadaOrdenada("nombre");
             JOptionPane.showMessageDialog(this, lista, "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
         });
 

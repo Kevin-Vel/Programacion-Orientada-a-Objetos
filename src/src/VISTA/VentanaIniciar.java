@@ -3,6 +3,7 @@ package VISTA;
 import MODELO.Cliente;
 import MODELO.Empleados;
 import CONTROLADOR.SistemaBanco;
+import MODELO.Persona;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,32 +73,26 @@ public class VentanaIniciar extends JFrame {
         String usuarioUpper = usuario.toUpperCase();
 
         // 🔹 LLAMAR AL MÉTODO DEL SISTEMA QUE YA TIENE REGISTRO AUTOMÁTICO
-        Object resultado = sistema.iniciarSesion(usuarioUpper, password);
+        Persona persona = sistema.iniciarSesion(usuarioUpper, password);
 
-        if (resultado instanceof Empleados) {
-            // Inicio de sesión exitoso para empleado
-            Empleados empleado = (Empleados) resultado;
-            JOptionPane.showMessageDialog(this,
-                    "¡Bienvenido empleado " + empleado.getNombre() + "!");
-            dispose();
+        if (persona != null) {
+            // 🔹 USO POLIMÓRFICO: mostrarInfo() se comporta diferente según Cliente o Empleado
+            String mensajeBienvenida = "¡Inicio de sesión exitoso!\n" + persona.mostrarInfo();
+            JOptionPane.showMessageDialog(this, mensajeBienvenida);
 
-            // Abrir ventana de empleado
-            VentanaEmpleado ventanaEmpleado = new VentanaEmpleado(empleado, sistema);
-            ventanaEmpleado.setVisible(true);
+            dispose(); // Cerrar ventana de login
 
-        } else if (resultado instanceof Cliente) {
-            // Inicio de sesión exitoso para cliente
-            Cliente cliente = (Cliente) resultado;
-            JOptionPane.showMessageDialog(this,
-                    "¡Bienvenido cliente " + cliente.getNombre() + "!");
-            dispose();
-
-            // Abrir ventana principal del cliente
-            VentanaPrincipalCliente ventanaCliente = new VentanaPrincipalCliente(sistema, cliente);
-            ventanaCliente.setVisible(true);
-
+            // 🔹 Dependiendo del tipo, abrimos una ventana u otra
+            if (persona instanceof Empleados) {
+                Empleados empleado = (Empleados) persona;
+                VentanaEmpleado ventanaEmpleado = new VentanaEmpleado(empleado, sistema);
+                ventanaEmpleado.setVisible(true);
+            } else if (persona instanceof Cliente) {
+                Cliente cliente = (Cliente) persona;
+                VentanaPrincipalCliente ventanaCliente = new VentanaPrincipalCliente(sistema, cliente);
+                ventanaCliente.setVisible(true);
+            }
         } else {
-            // resultado es null: credenciales incorrectas
             JOptionPane.showMessageDialog(this,
                     "Usuario o contraseña incorrectos",
                     "Error de autenticación", JOptionPane.ERROR_MESSAGE);
