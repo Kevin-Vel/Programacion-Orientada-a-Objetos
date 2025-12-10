@@ -72,17 +72,17 @@ public class VentanaIniciar extends JFrame {
         // Convertir a mayúsculas para consistencia
         String usuarioUpper = usuario.toUpperCase();
 
-        // 🔹 LLAMAR AL MÉTODO DEL SISTEMA QUE YA TIENE REGISTRO AUTOMÁTICO
+        //  Llama al metodo para Crear Cuenta en automatico
         Persona persona = sistema.iniciarSesion(usuarioUpper, password);
 
         if (persona != null) {
-            // 🔹 USO POLIMÓRFICO: mostrarInfo() se comporta diferente según Cliente o Empleado
+            //  Uso Polimorfico
             String mensajeBienvenida = "¡Inicio de sesión exitoso!\n" + persona.mostrarInfo();
             JOptionPane.showMessageDialog(this, mensajeBienvenida);
 
             dispose(); // Cerrar ventana de login
 
-            // 🔹 Dependiendo del tipo, abrimos una ventana u otra
+            //  Dependiendo del tipo, abrimos una ventana u otra
             if (persona instanceof Empleados) {
                 Empleados empleado = (Empleados) persona;
                 VentanaEmpleado ventanaEmpleado = new VentanaEmpleado(empleado, sistema);
@@ -99,3 +99,4 @@ public class VentanaIniciar extends JFrame {
         }
     }
 }
+
