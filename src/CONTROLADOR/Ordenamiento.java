@@ -15,10 +15,10 @@ public class Ordenamiento<T extends Persona> {
     private boolean usarOrdenamientoExterno = false; // 🔹 CONTROL
 
     // =====================================================
-    // 🔹 CONSTRUCTOR Y CONFIGURACIÓN
+    // CONSTRUCTOR Y CONFIGURACIÓN
     // =====================================================
     public Ordenamiento() {
-        this.usarOrdenamientoExterno = false; // Por defecto: NO usar ordenamiento externo
+        this.usarOrdenamientoExterno = false; // NO usar ordenamiento externo
     }
 
     public void activarOrdenamientoExterno(boolean activar) {
@@ -26,7 +26,7 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 MÉTODOS BÁSICOS
+    // MÉTODOS BÁSICOS
     // =====================================================
     public void agregar(T persona) {
         lista.add(persona);
@@ -37,7 +37,7 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 ORDENAMIENTO EN MEMORIA (simple)
+    // ORDENAMIENTO EN MEMORIA (simple)
     // =====================================================
     public void ordenarPorNombre() {
         lista.sort(Comparator.comparing(Persona::getNombre, String.CASE_INSENSITIVE_ORDER));
@@ -52,20 +52,20 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 MÉTODO PRINCIPAL QUE DECIDE QUÉ USAR
+    // MÉTODO PRINCIPAL QUE DECIDE QUÉ USAR
     // =====================================================
     public String listaFormateadaOrdenada(String criterio) {
         if (lista.isEmpty()) return "No hay registros.";
 
-        // 🔹 DECISIÓN: ¿Usar ordenamiento externo?
+        // DECISIÓN: ¿Usar ordenamiento externo?
         boolean debeUsarExterno = usarOrdenamientoExterno &&
                 lista.size() > UMBRAL_ORDENAMIENTO_EXTERNO;
 
         if (!debeUsarExterno) {
-            // 🔹 ORDENAMIENTO SIMPLE EN MEMORIA
+            // ORDENAMIENTO SIMPLE EN MEMORIA
             return ordenarEnMemoriaYFormatear(criterio);
         } else {
-            // 🔹 ORDENAMIENTO EXTERNO (solo si está activado y es necesario)
+            // ORDENAMIENTO EXTERNO (solo si está activado y es necesario)
             try {
                 return ordenarConExterno(criterio);
             } catch (IOException e) {
@@ -75,7 +75,7 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 ORDENAMIENTO SIMPLE EN MEMORIA
+    // ORDENAMIENTO SIMPLE EN MEMORIA
     // =====================================================
     private String ordenarEnMemoriaYFormatear(String criterio) {
         switch (criterio.toLowerCase()) {
@@ -94,7 +94,7 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 ORDENAMIENTO EXTERNO (solo para Clientes)
+    // ORDENAMIENTO EXTERNO (solo para Clientes)
     // =====================================================
     private String ordenarConExterno(String criterio) throws IOException {
         // Verificar que sea lista de Clientes
@@ -165,7 +165,7 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 LAMBDAS Y STREAMS (Unidad 3)
+    // LAMBDAS Y STREAMS (Unidad 3)
     // =====================================================
     public List<T> filtrar(Predicate<T> condicion) {
         return lista.stream()
@@ -187,7 +187,7 @@ public class Ordenamiento<T extends Persona> {
     }
 
     // =====================================================
-    // 🔹 MÉTODOS DE COMPATIBILIDAD
+    // MÉTODOS DE COMPATIBILIDAD
     // =====================================================
     @SuppressWarnings("unchecked")
     public List<Cliente> getListaCliente() {
@@ -203,4 +203,5 @@ public class Ordenamiento<T extends Persona> {
     public void Implementacion(Cliente c) {
         agregar((T) c);
     }
+
 }
