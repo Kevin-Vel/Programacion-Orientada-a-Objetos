@@ -16,13 +16,12 @@ public class Empleados extends Persona implements Autenticable {
     public String getCargo() { return cargo; }
     public void setCargo(String cargo) { this.cargo = cargo; }
 
-    public String geteDni() { return eDni; }
-    public void seteDni(String eDni) { this.eDni = eDni; }
+    public String getEDni() { return eDni; }
+    public void setEDni(String eDni) { this.eDni = eDni; }
 
     @Override
     public boolean autenticar(String usuario, String contraseña) {
-        // Usuario = EDNI
-        return eDni.equals(usuario) && password.equals(contraseña);
+        return eDni.equals(usuario) && getPassword().equals(contraseña);
     }
 
     @Override

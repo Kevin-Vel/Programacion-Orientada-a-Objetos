@@ -16,6 +16,7 @@ public class ConsolaContraseñas {
             JOptionPane.showMessageDialog(null, "Error al guardar contraseña: " + e.getMessage());
             System.out.println("ERROR: " + e.getMessage());
         }
+
     }
 
     public static Map<Integer, String> cargarPasswords() {

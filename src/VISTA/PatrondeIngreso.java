@@ -13,8 +13,22 @@ public class PatrondeIngreso {
 
             @Override
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                throws BadLocationException{
+                    throws BadLocationException{
                 if(text.matches("\\d*")&&(fb.getDocument().getLength()+text.length()-length)<= maxDigitos){
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
+    }
+    //Patron del DNI
+    public static void soloDni(JTextField campo, int maxDigitos){
+        ((AbstractDocument)campo.getDocument()).setDocumentFilter(new DocumentFilter(){
+            private final Pattern patron = Pattern.compile("[Ee]?\\d{0,8}");
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                throws BadLocationException{
+                if(text.matches("[Ee]?\\d{0,8}")&&(fb.getDocument().getLength()+text.length()-length)<= maxDigitos){
                     super.replace(fb, offset, length, text, attrs);
                 }
             }

@@ -1,44 +1,49 @@
 package CONTROLADOR;
 
-import MODELO.Cliente;
-import MODELO.Cuenta;
-import MODELO.Empleados;
-import MODELO.TipoCuenta;
+import MODELO.*;
+import VISTA.ConsolaContraseñas;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SistemaBanco {
 
-    private Ordenamiento ordenamiento;
+    // Genérico y específico para Clientes
+    private Ordenamiento<Cliente> ordenamientoClientes;
+    private Ordenamiento<Empleados> ordenamientoEmpleados;
 
     private static final String ARCHIVO_CLIENTES = "clientes.dat";
     private static final String ARCHIVO_CUENTAS = "cuentas.dat";
     private static final String ARCHIVO_EMPLEADOS = "empleados.dat";
+    private static final String ARCHIVO_EMPLEADOS_TXT = "empleados.txt";
 
     private List<Cuenta> cuentas;
     private List<Empleados> empleados;
 
     public SistemaBanco() {
-        this.ordenamiento = new Ordenamiento();
+        this.ordenamientoClientes = new Ordenamiento<>();
+        this.ordenamientoEmpleados = new Ordenamiento<>();
         this.cuentas = new ArrayList<>();
         this.empleados = new ArrayList<>();
         cargarDatos();
     }
 
     // ===========================
-    //    CARGAR DATOS
+    //         CARGAR DATOS
     // ===========================
     private void cargarDatos() {
-        // Cargar cuentas y empleados
         cuentas = cargarLista(ARCHIVO_CUENTAS);
         empleados = cargarLista(ARCHIVO_EMPLEADOS);
 
         // Cargar clientes en el ordenamiento
         List<Cliente> listaCargada = cargarLista(ARCHIVO_CLIENTES);
         for (Cliente c : listaCargada)
-            ordenamiento.Implementacion(c);
+            ordenamientoClientes.agregar(c);
+
+        // Cargar empleados en su ordenamiento
+        for (Empleados e : empleados)
+            ordenamientoEmpleados.agregar(e);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,41 +60,117 @@ public class SistemaBanco {
     }
 
     // ===========================
-    //      GESTIÓN CLIENTES
+    //        GESTIÓN CLIENTES
     // ===========================
     public Cliente crearCliente(int idclie, int dni, String nom, String apell, String contraseña) {
         Cliente cliente = new Cliente(idclie, dni, nom, apell, contraseña);
-        ordenamiento.Implementacion(cliente);
+        ordenamientoClientes.agregar(cliente);
         guardarDatos();
+        ConsolaContraseñas.guardarContraseña(dni, contraseña);
         return cliente;
     }
 
-    public Cliente buscarClientePorDni(String dniBuscado) {
-        for (Cliente c : ordenamiento.getListaCliente()) {
-            if (c.getDni().equals(dniBuscado)) {
-                return c;
-            }
-        }
-        return null;
+    public Cliente buscarClientePorDni(int dniBuscado) {
+        // Uso de stream y Optional
+        Optional<Cliente> clienteOpt = ordenamientoClientes.getLista().stream()
+                .filter(c -> c.getDni() == dniBuscado)
+                .findFirst();
+
+        return clienteOpt.orElse(null);
     }
 
+    // MÉTODOS CON LAMBDAS
 
+    // Filtrar clientes por apellido
+    public List<Cliente> buscarClientesPorApellido(String apellido) {
+        return ordenamientoClientes.filtrar(c ->
+                c.getApellido().equalsIgnoreCase(apellido)
+        );
+    }
+
+    // Contar clientes con DNI mayor a
+    public long contarClientesConDniMayorA(int dniMinimo) {
+        return ordenamientoClientes.contar(c -> c.getDni() > dniMinimo);
+    }
+
+    //Obtener nombres únicos de clientes
+    public List<String> getNombresUnicosClientes() {
+        return ordenamientoClientes.getLista().stream()
+                .map(Cliente::getNombre)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    //Clientes ordenados por DNI descendente
+    public List<Cliente> getClientesOrdenadosPorDniDesc() {
+        return ordenamientoClientes.getLista().stream()
+                .sorted((c1, c2) -> Integer.compare(c2.getDni(), c1.getDni()))
+                .collect(Collectors.toList());
+    }
 
     // ===========================
     //        GESTIÓN EMPLEADOS
     // ===========================
     public Empleados buscarEmpleadoPorCodigo(String codigo) {
-        for (Empleados e : empleados) {
-            if (e.getDni().equalsIgnoreCase(codigo)) {  // su “dni” en realidad es código
-                return e;
-            }
-        }
-        return null;
+        // Búsqueda con stream
+        Optional<Empleados> empleadoOpt = empleados.stream()
+                .filter(e -> e.getEDni().equalsIgnoreCase(codigo))
+                .findFirst();
+
+        return empleadoOpt.orElse(null);
     }
 
     public void registrarEmpleado(Empleados e) {
         empleados.add(e);
+        ordenamientoEmpleados.agregar(e);
         guardarDatos();
+        guardarEmpleadoTxt(e);
+    }
+
+    //  Filtrar empleados por cargo
+    public List<Empleados> buscarEmpleadosPorCargo(String cargo) {
+        return ordenamientoEmpleados.filtrar(e ->
+                e.getCargo().equalsIgnoreCase(cargo)
+        );
+    }
+
+    // ===========================
+    //   GUARDAR EMPLEADOS
+    // ===========================
+    private void guardarEmpleadoTxt(Empleados empleado) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_EMPLEADOS_TXT, true))) {
+            pw.println("Código: " + empleado.getEDni() +
+                    ", Nombre: " + empleado.getNombre() +
+                    ", Apellido: " + empleado.getApellido() +
+                    ", Cargo: " + empleado.getCargo());
+            System.out.println("Empleado guardado en txt: " + empleado.getEDni());
+        } catch (IOException e) {
+            System.err.println("Error al guardar empleado en txt: " + e.getMessage());
+        }
+    }
+
+    // ===========================
+    //   REGISTRO AUTOMÁTICO EMPLEADOS
+    // ===========================
+    private Empleados registrarEmpleadoAutomatico(String codigo, String password) {
+        try {
+            // 🔹 Constructor corregido: (nombre, apellido, eDni, password, cargo)
+            Empleados nuevoEmpleado = new Empleados(
+                    "Empleado_" + codigo,
+                    "Apellido",
+                    codigo,
+                    password,
+                    "Nuevo_Empleado"
+            );
+
+            registrarEmpleado(nuevoEmpleado);
+            System.out.println("Empleado registrado automáticamente: " + codigo);
+            return nuevoEmpleado;
+
+        } catch (Exception e) {
+            System.err.println("Error al registrar empleado automático: " + e.getMessage());
+            return null;
+        }
     }
 
     // ===========================
@@ -107,49 +188,78 @@ public class SistemaBanco {
             cuentas.add(cuenta);
             guardarDatos();
             System.out.println("Cuenta agregada para cliente: " + cuenta.getCliente().getNombre());
-        } else {
-            System.out.println("Error: cuenta nula.");
         }
     }
 
+    //  Filtrar cuentas por saldo mínimo
+    public List<Cuenta> getCuentasConSaldoMayorA(double saldoMinimo) {
+        return cuentas.stream()
+                .filter(c -> c.getSaldo() > saldoMinimo)
+                .collect(Collectors.toList());
+    }
+
     // ===========================
-    //    INICIO SESIÓN SIMPLE
+    //   INICIO SESIÓN
     // ===========================
-    public int iniciarSesion(int dni) {
-        return dni;
+    public Persona iniciarSesion(String identificador, String password) {
+        // Empleado
+        if (Character.isLetter(identificador.charAt(0))) {
+            // Buscar empleado existente
+            Empleados empleado = buscarEmpleadoPorCodigo(identificador);
+
+            if (empleado != null) {
+                // Verificar contraseña
+                if (empleado.autenticar(identificador, password)) {
+                    return empleado;
+                }
+                return null; // Contraseña incorrecta
+            }
+
+            // Si no existe, registrarlo automáticamente
+            return registrarEmpleadoAutomatico(identificador, password);
+        }
+
+        // Cliente
+        try {
+            int dni = Integer.parseInt(identificador);
+            Cliente cliente = buscarClientePorDni(dni);
+
+            if (cliente != null && cliente.autenticar(identificador, password)) {
+                return cliente;
+            }
+
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        return null;
     }
 
     // ===========================
     //      GUARDAR DATOS
     // ===========================
     public void guardarDatos() {
-        // Guardar clientes
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_CLIENTES))) {
-            oos.writeObject(ordenamiento.getListaCliente());
-            System.out.println("Clientes guardados: " + ordenamiento.getListaCliente().size());
+            oos.writeObject(ordenamientoClientes.getLista());
         } catch (IOException e) {
             System.err.println("Error al guardar clientes: " + e.getMessage());
         }
 
-        // Guardar cuentas
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_CUENTAS))) {
             oos.writeObject(cuentas);
-            System.out.println("Cuentas guardadas: " + cuentas.size());
         } catch (IOException e) {
             System.err.println("Error al guardar cuentas: " + e.getMessage());
         }
 
-        // Guardar EMPLEADOS  (no lo tenías, por eso fallaba)
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_EMPLEADOS))) {
             oos.writeObject(empleados);
-            System.out.println("Empleados guardados: " + empleados.size());
         } catch (IOException e) {
             System.err.println("Error al guardar empleados: " + e.getMessage());
         }
     }
 
     // ===========================
-    //     TRANSACCIONES
+    //  REGISTRO TRANSACCIONES
     // ===========================
     public void registrarTransaccion(String descripcion) {
         try (FileWriter fw = new FileWriter("transacciones.txt", true)) {
@@ -160,10 +270,17 @@ public class SistemaBanco {
     }
 
     // ===========================
-    //  GETTERS NECESARIOS
+    //          GETTERS
     // ===========================
-    public Ordenamiento getOrdenamiento() {
-        return ordenamiento;
+
+    // Para compatibilidad con código existente que usa getOrdenamiento()
+    public Ordenamiento<Cliente> getOrdenamiento() {
+        return ordenamientoClientes;
+    }
+
+    // Getters necesarios...
+    public List<Cliente> getListaClientes() {
+        return ordenamientoClientes.getLista();
     }
 
     public List<Cuenta> getCuentas() {
@@ -173,6 +290,15 @@ public class SistemaBanco {
     public List<Empleados> getEmpleados() {
         return new ArrayList<>(empleados);
     }
+
+    // Método para usar ordenamientoExterno
+    public String getClientesOrdenadosExternamente(String criterio) {
+        return ordenamientoClientes.listaFormateadaOrdenada(criterio);
+    }
+
+    //Método para activar/desactivar ordenamiento externo
+    public void configurarOrdenamientoExterno(boolean activar) {
+        ordenamientoClientes.activarOrdenamientoExterno(activar);
+        ordenamientoEmpleados.activarOrdenamientoExterno(activar);
+    }
 }
-
-

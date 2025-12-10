@@ -10,6 +10,7 @@ public class VentanaTransacciones extends JFrame {
     private Cliente cliente;
     private JTextField txtMonto;
     private JButton btnTransferir, btnVolver;
+    int saldo = 3000;
 
     public VentanaTransacciones(SistemaBanco sistema, Cliente cliente) {
         this.sistema = sistema;
@@ -25,7 +26,7 @@ public class VentanaTransacciones extends JFrame {
         JPanel panelCentro = new JPanel(new GridLayout(3, 2, 10, 10));
         panelCentro.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        panelCentro.add(new JLabel("Saldo actual:"));
+        panelCentro.add(new JLabel("Saldo actual:"+saldo));
         JLabel lblSaldo = new JLabel("S/ " + cliente.getCuenta().getSaldo());
         panelCentro.add(lblSaldo);
 

@@ -12,3 +12,4 @@ public class Autenticador<T extends Autenticable> {
         return entidad.autenticar(usuario, contraseña);
     }
 }
+

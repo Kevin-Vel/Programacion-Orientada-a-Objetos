@@ -2,8 +2,8 @@ package VISTA;
 
 import MODELO.Cliente;
 import MODELO.Empleados;
-import CONTROLADOR.Autenticable;
 import CONTROLADOR.SistemaBanco;
+import MODELO.Persona;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +26,7 @@ public class VentanaIniciar extends JFrame {
 
         // Panel formulario
         JPanel panelFormulario = new JPanel(new GridLayout(2, 2, 10, 10));
-        panelFormulario.add(new JLabel("Usuario (DNI o E...):"));
+        panelFormulario.add(new JLabel("Usuario (DNI o E..):"));
         txtUsuario = new JTextField();
         panelFormulario.add(txtUsuario);
 
@@ -47,6 +47,7 @@ public class VentanaIniciar extends JFrame {
 
         // Validaciones
         PatrondeIngreso.soloNumeros(txtPassword, 4);
+        PatrondeIngreso.soloDni(txtUsuario,8);
 
         // Acción del botón Iniciar Sesión
         btnIniciar.addActionListener(e -> iniciarSesion());
@@ -68,35 +69,33 @@ public class VentanaIniciar extends JFrame {
             return;
         }
 
-        Autenticable entidad;
+        // Convertir a mayúsculas para consistencia
+        String usuarioUpper = usuario.toUpperCase();
 
-        // 🔹 Detectar tipo de usuario según el formato
-        if (usuario.startsWith("E")) {
-            entidad = sistema.buscarEmpleadoPorCodigo(usuario); // método que debes tener en SistemaBanco
-        } else {
-            try {
-                int dni = Integer.parseInt(usuario);
-                entidad = (Autenticable) sistema.buscarPorDni(String.valueOf(dni));
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "DNI inválido.");
-                return;
+        // 🔹 LLAMAR AL MÉTODO DEL SISTEMA QUE YA TIENE REGISTRO AUTOMÁTICO
+        Persona persona = sistema.iniciarSesion(usuarioUpper, password);
+
+        if (persona != null) {
+            // 🔹 USO POLIMÓRFICO: mostrarInfo() se comporta diferente según Cliente o Empleado
+            String mensajeBienvenida = "¡Inicio de sesión exitoso!\n" + persona.mostrarInfo();
+            JOptionPane.showMessageDialog(this, mensajeBienvenida);
+
+            dispose(); // Cerrar ventana de login
+
+            // 🔹 Dependiendo del tipo, abrimos una ventana u otra
+            if (persona instanceof Empleados) {
+                Empleados empleado = (Empleados) persona;
+                VentanaEmpleado ventanaEmpleado = new VentanaEmpleado(empleado, sistema);
+                ventanaEmpleado.setVisible(true);
+            } else if (persona instanceof Cliente) {
+                Cliente cliente = (Cliente) persona;
+                VentanaPrincipalCliente ventanaCliente = new VentanaPrincipalCliente(sistema, cliente);
+                ventanaCliente.setVisible(true);
             }
-        }
-
-        // 🔹 Validar autenticación
-        if (entidad != null && entidad.autenticar(usuario, password)) {
-            JOptionPane.showMessageDialog(this, "¡Inicio de sesión exitoso!");
-            dispose();
-
-            if (entidad instanceof Empleados) {
-                new VentanaEmpleado((Empleados) entidad).setVisible(true);
-            } else if (entidad instanceof Cliente) {
-                new VentanaPrincipalCliente(sistema, (Cliente) entidad).setVisible(true);
-            }
-
         } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            JOptionPane.showMessageDialog(this,
+                    "Usuario o contraseña incorrectos",
+                    "Error de autenticación", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
-

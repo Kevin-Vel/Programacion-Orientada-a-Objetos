@@ -6,35 +6,39 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Menu extends JFrame {
+
     private SistemaBanco sistema;
 
     public Menu(SistemaBanco sistema) {
-        this.sistema = new SistemaBanco();
+        this.sistema = sistema; // ✔ CORREGIDO
+
         //Interfaz de Pantalla
-        setTitle("Hola, biienvenido ala Banca Digital");
+        setTitle("Hola, bienvenido a la Banca Digital");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);//Centra la ventana
-//logica de Opciones
+        setLocationRelativeTo(null);
+
+        // Panel
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1, 10, 10));// 3 filas y 10px
+        panel.setLayout(new GridLayout(4, 1, 10, 10)); // ahora 4 filas porque tienes 4 botones
 
-        //opciones
-        JButton btnCliente = new JButton("Creaar Cliente");
-        JButton btnIniciar = new JButton("Iniciar Sesion");
+        // Botones
+        JButton btnCliente = new JButton("Crear Cliente");
+        JButton btnIniciar = new JButton("Iniciar Sesión");
+        JButton btnVerClientes = new JButton("Ver Clientes");
         JButton btnSalir = new JButton("Salir");
-        JButton btnVerClientes= new JButton(("Ver Clientes"));
 
-        //implementacion
+        //Agregar botones al panel
         panel.add(btnCliente);
         panel.add(btnIniciar);
+        panel.add(btnVerClientes);
         panel.add(btnSalir);
 
         add(panel, BorderLayout.CENTER);
 
-        //acciones
-        btnCliente.addActionListener(e ->{
-            VentanaCliente ventana=new VentanaCliente(this.sistema);
+        // acciones
+        btnCliente.addActionListener(e -> {
+            VentanaCliente ventana = new VentanaCliente(this.sistema);
             ventana.setVisible(true);
             dispose();
         });
@@ -42,13 +46,15 @@ public class Menu extends JFrame {
         btnIniciar.addActionListener(e -> {
             VentanaIniciar iniciar = new VentanaIniciar(this.sistema);
             iniciar.setVisible(true);
-            dispose(); // para cerrar la ventana actual si quieres
+            dispose();
         });
-        btnSalir.addActionListener( e ->
-                System.exit(0));
+
         btnVerClientes.addActionListener(e -> {
-            String lista = this.sistema.getOrdenamiento().listaFormateada();
+            // ✔ Ahora se pasa criterio: nombre / apellido / dni
+            String lista = this.sistema.getOrdenamiento().listaFormateadaOrdenada("nombre");
             JOptionPane.showMessageDialog(this, lista, "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
         });
+
+        btnSalir.addActionListener(e -> System.exit(0));
     }
 }

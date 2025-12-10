@@ -2,20 +2,18 @@ package VISTA;
 
 import MODELO.Empleados;
 import CONTROLADOR.SistemaBanco;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class VentanaEmpleado extends JFrame {
 
     private Empleados empleado;
     private SistemaBanco sistema;
 
-    public VentanaEmpleado(SistemaBanco sistema, Empleados empleado) {
+    // CORREGIDO: Constructor ahora recibe dos parámetros
+    public VentanaEmpleado(Empleados empleado, SistemaBanco sistema) {
         this.empleado = empleado;
-        this.sistema = sistema;
+        this.sistema = sistema;  // <-- AQUÍ SE ASIGNA EL SISTEMA
 
         setTitle("Panel del Empleado - " + empleado.getNombre());
         setSize(500, 350);
@@ -63,26 +61,22 @@ public class VentanaEmpleado extends JFrame {
         add(panel);
 
         // 🔹 Eventos de botones
-        btnVerClientes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "📋 Mostrando lista de clientes (pendiente de implementar)");
-            }
+        btnVerClientes.addActionListener(e -> {
+            // Ahora puede usar 'sistema' porque está asignado
+            String lista = this.sistema.getOrdenamiento().listaFormateadaOrdenada("nombre");
+            JOptionPane.showMessageDialog(this, lista, "Lista de Clientes", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        btnRegistrarCliente.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "🧾 Formulario de registro de cliente (pendiente de implementar)");
-            }
+        btnRegistrarCliente.addActionListener(e -> {
+            // Puede abrir VentanaCliente pasando el sistema
+            VentanaCliente ventanaCliente = new VentanaCliente(sistema);
+            ventanaCliente.setVisible(true);
+            dispose(); // Cierra esta ventana
         });
 
-        btnCerrarSesion.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose(); // Cierra esta ventana
-                JOptionPane.showMessageDialog(null, "Sesión cerrada correctamente.");
-            }
+        btnCerrarSesion.addActionListener(e -> {
+            dispose(); // Cierra esta ventana
+            JOptionPane.showMessageDialog(null, "Sesión cerrada correctamente.");
         });
     }
 }

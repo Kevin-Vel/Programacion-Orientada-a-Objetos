@@ -8,6 +8,7 @@ import MODELO.TipoCuenta;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class VentanaCliente extends JFrame {
     private SistemaBanco sistema;
     private JTextField txtDni, txtNom, txtApell;
@@ -47,6 +48,7 @@ public class VentanaCliente extends JFrame {
         panelFormulario.add(new JLabel("Contraseña:"));
         txtContraseña = new JPasswordField();
         panelFormulario.add(txtContraseña);
+        PatrondeIngreso.soloNumeros(txtContraseña,4);
 
         panelFormulario.add(new JLabel("Tipo de cuenta"));
         String[] tipos={"DEBITO", "CREDITO"};
